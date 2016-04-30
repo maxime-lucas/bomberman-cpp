@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 
     player1 = IMG_Load("img/sprite-player/player1(x2).png"); /*chargement image du joueur 1*/
     SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /*affichage initial à l'écran*/
+    SDL_Flip(ecran);
 
     SDL_EnableKeyRepeat(10,60); /*on active la répétition des touches lorsqu'on maintient enfoncé*/
 
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
                 {
                     case SDLK_UP: // Flèche haut
                         if (haut != 1) positionDansSprite.x = 0; /*si flag déplacement à zéro position de départ de l'animation*/
-                        positionDansSprite.y = 60;
+                            positionDansSprite.y = 60;
                         if ((positionDansEcran.y = positionDansEcran.y - 7) < 0) /*traitement des bords de fenètre pour ne pas dépasser*/
                             positionDansEcran.y = positionDansEcran.y + 7;
                         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
                         break;
                     case SDLK_DOWN: // Flèche bas
                         if (bas != 1) positionDansSprite.x = 0; /*si flag déplacement à zéro position de départ de l'animation*/
-                        positionDansSprite.y = 0;
+                            positionDansSprite.y = 0;
                         if ((positionDansEcran.y = positionDansEcran.y + 7) >= 420) /*traitement des bords de fenètre pour ne pas dépasser*/
                             positionDansEcran.y = positionDansEcran.y - 7;
                         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
@@ -66,7 +67,7 @@ int main(int argc, char *argv[])
                         break;
                     case SDLK_RIGHT: // Flèche droite
                         if (droite != 1) positionDansSprite.x = 216; /*si flag déplacement à zéro position de départ de l'animation*/
-                        positionDansSprite.y = 0;
+                            positionDansSprite.y = 0;
                         if ((positionDansEcran.x = positionDansEcran.x + 7) >= 604) /*traitement des bords de fenètre pour ne pas dépasser*/
                             positionDansEcran.x = positionDansEcran.x - 7;
                         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
@@ -78,7 +79,7 @@ int main(int argc, char *argv[])
                         break;
                     case SDLK_LEFT: // Flèche gauche
                         if (gauche != 1) positionDansSprite.x = 216; /*si flag déplacement à zéro position de départ de l'animation*/
-                        positionDansSprite.y = 60;
+                            positionDansSprite.y = 60;
                         if  ((positionDansEcran.x = positionDansEcran.x - 7) < 0) /*traitement des bords de fenètre pour ne pas dépasser*/
                             positionDansEcran.x = positionDansEcran.x + 7;
                         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
@@ -90,6 +91,44 @@ int main(int argc, char *argv[])
                         break;
                 }
                 break;
+            case SDL_KEYUP: /*si on relâche une touche*/
+                switch (event.key.keysym.sym) /*switch case pour les actions clavier*/
+                {
+                    case SDLK_UP: /*fleche haut*/
+                        positionDansSprite.x = 0;
+                        positionDansSprite.y = 60;
+                        SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
+                        SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /* on colle le sprite dans le buffer*/
+                        SDL_Flip(ecran); /*affichage du sprite à l'écran*/
+                        haut = 0;
+                        break;
+                    case SDLK_DOWN: /*fleche bas*/
+                        positionDansSprite.x = 0;
+                        positionDansSprite.y = 0;
+                        SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
+                        SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /* on colle le sprite dans le buffer*/
+                        SDL_Flip(ecran); /*affichage du sprite à l'écran*/
+                        bas = 0;
+                        break;
+                    case SDLK_LEFT: /*fleche gauche*/
+                        positionDansSprite.x = 216;
+                        positionDansSprite.y = 60;
+                        SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
+                        SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /* on colle le sprite dans le buffer*/
+                        SDL_Flip(ecran); /*affichage du sprite à l'écran*/
+                        gauche = 0;
+                        break;
+                    case SDLK_RIGHT: /*fleche droite*/
+                        positionDansSprite.x = 216;
+                        positionDansSprite.y = 0;
+                        SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
+                        SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /* on colle le sprite dans le buffer*/
+                        SDL_Flip(ecran); /*affichage du sprite à l'écran*/
+                        droite = 0;
+                        break;
+                }
+
+
         }
     }
     SDL_FreeSurface(player1);
