@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <fmodex/fmod.h>
+
 
 SDL_Surface *ecran; /*variable global zone affichage écran*/
 SDL_Rect positionDansEcran; /*variable globale pour position affichange dans écran*/
@@ -19,6 +21,17 @@ int main(int argc, char *argv[])
     positionDansSprite.w = 36; positionDansSprite.h = 60;
     haut = bas = gauche = droite = 0;
 
+    FMOD_SYSTEM *system; /*déclaration d'un objet son*/
+    FMOD_SOUND *musique; /*déclaration d'une musique*/
+    FMOD_CHANNELGROUP *canaux; /*déclaration d'un groupe de canaux*/
+    FMOD_System_Create(&system); /*allocation de l'objet son*/
+    FMOD_System_Init(system, 32, FMOD_INIT_NORMAL, NULL); /*initialisation de l'objet son*/
+    FMOD_System_CreateSound(system, "music/theme.mp3", FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique); /*chargement musique dans objet son*/
+    FMOD_Sound_SetLoopCount(musique, -1); /*mise en boucle de la musique*/
+    FMOD_System_GetMasterChannelGroup(system ,&canaux); /*récupération du groupe de canaux*/
+    FMOD_ChannelGroup_SetVolume(canaux ,0.5); /*réglage du volume de la musique*/
+    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, NULL); /* On joue la musique */
+
     SDL_Init(SDL_INIT_VIDEO);
 
     ecran = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_DOUBLEBUF); /*création de la fenêtre avec double buffering*/
@@ -28,7 +41,7 @@ int main(int argc, char *argv[])
     SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /*affichage initial à l'écran*/
     SDL_Flip(ecran);
 
-    SDL_EnableKeyRepeat(10,60); /*on active la répétition des touches lorsqu'on maintient enfoncé*/
+    SDL_EnableKeyRepeat(10,50); /*on active la répétition des touches lorsqu'on maintient enfoncé*/
 
     while (continuer) /* TANT QUE la variable ne vaut pas 0 */
     {
@@ -89,6 +102,8 @@ int main(int argc, char *argv[])
                         if ((positionDansSprite.x = positionDansSprite.x + 36) >= 432) /* si on arrive au bout de l'animation, on reprend au début*/
                             positionDansSprite.x = 216;
                         break;
+                    default:
+                        break;
                 }
                 break;
             case SDL_KEYUP: /*si on relâche une touche*/
@@ -100,7 +115,7 @@ int main(int argc, char *argv[])
                         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
                         SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /* on colle le sprite dans le buffer*/
                         SDL_Flip(ecran); /*affichage du sprite à l'écran*/
-                        haut = 0;
+                        haut = 0; /*passage du flag position sprite a zéro pour recuperer la position initiale*/
                         break;
                     case SDLK_DOWN: /*fleche bas*/
                         positionDansSprite.x = 0;
@@ -108,7 +123,7 @@ int main(int argc, char *argv[])
                         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
                         SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /* on colle le sprite dans le buffer*/
                         SDL_Flip(ecran); /*affichage du sprite à l'écran*/
-                        bas = 0;
+                        bas = 0; /*passage du flag position sprite a zéro pour recuperer la position initiale*/
                         break;
                     case SDLK_LEFT: /*fleche gauche*/
                         positionDansSprite.x = 216;
@@ -116,7 +131,7 @@ int main(int argc, char *argv[])
                         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
                         SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /* on colle le sprite dans le buffer*/
                         SDL_Flip(ecran); /*affichage du sprite à l'écran*/
-                        gauche = 0;
+                        gauche = 0; /*passage du flag position sprite a zéro pour recuperer la position initiale*/
                         break;
                     case SDLK_RIGHT: /*fleche droite*/
                         positionDansSprite.x = 216;
@@ -124,15 +139,19 @@ int main(int argc, char *argv[])
                         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
                         SDL_BlitSurface(player1 ,&positionDansSprite ,ecran ,&positionDansEcran); /* on colle le sprite dans le buffer*/
                         SDL_Flip(ecran); /*affichage du sprite à l'écran*/
-                        droite = 0;
+                        droite = 0; /*passage du flag position sprite a zéro pour recuperer la position initiale*/
+                        break;
+                    default:
                         break;
                 }
 
 
         }
     }
-    SDL_FreeSurface(player1);
-    SDL_Quit();
+    SDL_FreeSurface(player1); /*libération de l'espace mémoire du sprite joueur 1*/
+    FMOD_System_Close(system); /*fermeture de l'objet son*/
+    FMOD_System_Release(system); /*libération de l'objet son*/
+    SDL_Quit(); /*fermeture de SDL*/
 
     return EXIT_SUCCESS;
 }
