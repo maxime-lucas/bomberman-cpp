@@ -40,6 +40,12 @@ bool init()
 		return false;
 	}
 
+	if( IMG_Init() == -1 )
+	{
+		printf("init:img_init:error:%s\n", SDL_GetError() );
+		return false;
+	}
+
 	if( TTF_Init() == -1 )
 	{
 		printf("TTF se charge pas\n");
@@ -48,29 +54,6 @@ bool init()
 
 	SDL_WM_SetCaption( "TTF Test", NULL );
 
-	return true;
-}
-
-bool load_files()
-{	
-	// Chargement du fond
-	background = IMG_Load("background.png");
-
-	// Chargement du font
-	font = TTF_OpenFont( "CaslonBold.ttf", 28); 
-	
-	// Vérification des erreurs
-	if( background == NULL )
-	{
-		printf("Le background se charge pas\n");
-		return false;
-	}
-	if( font == NULL ) 
-	{
-		printf("La police se charge pas\n");
-		return false;
-	}
-	printf("load_files:done\n");
 	return true;
 }
 
@@ -111,11 +94,7 @@ int main( int arc, char* args[] )
 		return EXIT_FAILURE;
 	}
 
-	if(!load_files())
-	{
-		printf("Erreur dans le chargement des fichiers : %s\n", SDL_GetError());
-		return EXIT_FAILURE;
-	}	
+	background = IMG_Load("../img/start-screen/Start.png");
 
 	message = TTF_RenderText_Solid( font, "Test pour sdl_ttf", textColor );
 
