@@ -1,10 +1,11 @@
 // Les fichiers d'entête
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include <string>
 #include <SDL/SDL_ttf.h>
+#include "functions.h"
 
 // Les attributs de l'écran (640 * 480)
 const int SCREEN_WIDTH = 640;
@@ -13,97 +14,32 @@ const int SCREEN_BPP = 32;
 
 // Les surfaces
 SDL_Surface *screen = NULL;
-SDL_Surface *background = NULL;
-SDL_Surface *message = NULL;
+SDL_Surface *image  = NULL;
 
 // La structure d'evenement
 SDL_Event event;
 
 // Le font a utiliser
-TTF_Font *font = NULL;
+TTF_Font *font;
 
-// La couleur ud font
-SDL_Color textColor = { 255, 255, 255 };
-
-bool init()
-{
-	if( SDL_Init(SDL_INIT_EVERYTHING ) == -1)
-	{
-		printf("Initialisation de SDL impossible: %s\n", SDL_GetError());
-		return false;
-	}
-
-	screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE );
-
-	if( screen == NULL )
-	{
-		return false;
-	}
-
-	if( IMG_Init() == -1 )
-	{
-		printf("init:img_init:error:%s\n", SDL_GetError() );
-		return false;
-	}
-
-	if( TTF_Init() == -1 )
-	{
-		printf("TTF se charge pas\n");
-		return false;
-	}
-
-	SDL_WM_SetCaption( "TTF Test", NULL );
-
-	return true;
-}
-
-void clean_up()
-{
-	// Free des surfaces
-	SDL_FreeSurface( background );
-	SDL_FreeSurface( message );
-
-	// Fermeture des fonts
-	TTF_CloseFont( font );
-
-	// Quitte SDL_TTF
-	TTF_Quit();
-
-	// Quitte SDL
-	SDL_Quit();
-}
-
-void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip = NULL )
-{
-	SDL_Rect offset;
-
-	offset.x = x;
-	offset.y = y;
-
-	SDL_BlitSurface(src, clip, dest, &offset);
-}
-
+// La couleur
+SDL_Color textColor = { 0,0,0};
 
 int main( int arc, char* args[] )
 {
 	bool quit = false;
 
 	if(!init())
-	{
-		printf("Erreur dans l'initialisation : %s\n", SDL_GetError());
 		return EXIT_FAILURE;
-	}
+	if(!load_files())
+		return EXIT_FAILURE;
 
-	background = IMG_Load("../img/start-screen/Start.png");
-
-	message = TTF_RenderText_Solid( font, "Test pour sdl_ttf", textColor );
-
-	if( message == NULL ) {
+	message = TTF_RenderText_Solid( font, "Play now !", textColor );
+	if( message == NULL )
 		return 1;
-	}
 
-	apply_surface(0,0, background, screen);
-	apply_surface(200,200,message, screen);
+	apply_surface( 0,0, background, screen );
+	apply_surface( 0, 200, message, screen );
 
 	SDL_Flip( screen );
 
