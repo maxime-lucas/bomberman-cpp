@@ -39,6 +39,10 @@
 		<Unit filename="Bomber.cpp" />
 		<Unit filename="Classes.h" />
 		<Unit filename="Figure.cpp" />
+		<Unit filename="Functions.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="Functions.h" />
 		<Unit filename="Header.h" />
 		<Unit filename="Shape.cpp" />
 		<Unit filename="Timer.cpp" />

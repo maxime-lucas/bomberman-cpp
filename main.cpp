@@ -4,6 +4,10 @@ int main(int argc, char *argv[])
 {
     SDL_Surface *ecran ; /*variable zone affichage*/
 
+    SDL_Event event;
+
+    bool quit = false;
+
     FMOD_SYSTEM *system; /*déclaration d'un objet son*/
     FMOD_SOUND *musique; /*déclaration d'une musique*/
     FMOD_CHANNELGROUP *canaux; /*déclaration d'un groupe de canaux*/
@@ -19,6 +23,23 @@ int main(int argc, char *argv[])
 
     ecran = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF); /*création de la fenêtre avec double buffering*/
     SDL_WM_SetCaption("Bomberman", NULL); /*nom de la fenêtre*/
+
+    Bomber *player1 = new Bomber();
+
+    player1->show(ecran);
+
+    SDL_Flip(ecran);
+
+    while(!quit)
+    {
+        while(SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_QUIT)
+            {
+                quit = true;
+            }
+        }
+    }
 
     //startscreen(ecran);
 

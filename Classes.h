@@ -12,25 +12,33 @@ protected:
     int nbSprites; //nombre de sprites (pour perso)
 
 public:
+    Shape();
     Shape(SDL_Surface* , SDL_Rect , int);
     virtual ~Shape();
-    virtual void print(SDL_Surface* , SDL_Rect) = 0;
+    virtual void show(SDL_Surface*) = 0;
 };
 
-class Figure : public Shape()
+class Figure : public Shape
 {
 public:
+    Figure();
+    virtual ~Figure();
     Figure(SDL_Surface* , SDL_Rect , int);
+    void show(SDL_Surface*);
 protected:
     int xVel , yVel; //taille du déplacement perso
     int speed; //
     int direction; //Noth = 0 , South = 1 , East = 2 , West = 3
 };
 
-class Bomber
+class Bomber : public Figure
 {
+protected:
+
 public:
     Bomber();
+    ~Bomber();
+    void show (SDL_Surface*);
 };
 
 class Timer
