@@ -13,6 +13,6 @@ Mario::~Mario() {}
 
 void Mario::show(SDL_Surface *dest)
 {
-	this->dimCoordShape.x = 100;
+	printf("Mario\n");
 	Figure::show(dest);
 }

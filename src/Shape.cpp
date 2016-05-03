@@ -4,8 +4,8 @@ Shape::Shape()
 	this->sprite = NULL;
 	this->nbSprites = 1;
 	
-	this->dimCoordShape.x = 0;
-	this->dimCoordShape.y = 0;
+	this->dimCoordEcran.x = 0;
+	this->dimCoordEcran.y = 0;
 }
 
 Shape::Shape(SDL_Surface* s,SDL_Rect r,int nb)
@@ -14,8 +14,8 @@ Shape::Shape(SDL_Surface* s,SDL_Rect r,int nb)
 	this->dimCoordSprite = r;
 	this->nbSprites = nb;
 	
-	this->dimCoordShape.x = 0;
-	this->dimCoordShape.y = 0;
+	this->dimCoordEcran.x = 0;
+	this->dimCoordEcran.y = 0;
 }
 
 Shape::~Shape() {}

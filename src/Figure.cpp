@@ -15,5 +15,5 @@ Figure::~Figure() {}
 
 void Figure::show(SDL_Surface *dest)
 {
-	apply_surface( dimCoordShape.x, dimCoordShape.y, sprite, dest, &dimCoordSprite );
+	apply_surface( dimCoordEcran.x, dimCoordEcran.y, sprite, dest, &dimCoordSprite );
 }

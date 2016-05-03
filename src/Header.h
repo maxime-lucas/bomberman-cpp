@@ -4,6 +4,7 @@
 // Bibliothèques standards
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 
 // Bibliothèques SDL
 #include <SDL/SDL.h>

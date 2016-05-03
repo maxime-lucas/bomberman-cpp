@@ -7,7 +7,7 @@ class Shape
 {
 	protected: 
 		SDL_Rect dimCoordSprite; // Coordonnées dans l'image
-		SDL_Rect dimCoordShape; // Coordonnées dans l'écran
+		SDL_Rect dimCoordEcran; // Coordonnées dans l'écran
 		SDL_Surface *sprite; // Feuille de sprite stockée ici
 		int nbSprites; // Nombre de sprites (surtout pour les personnages)
 		
@@ -16,6 +16,21 @@ class Shape
 		Shape(SDL_Surface*,SDL_Rect,int);
 		virtual ~Shape();
 		virtual void show(SDL_Surface*) = 0;
+};
+
+////////////////////////////////////	BUTTON ////////////////////////////////////////////////
+class Button : public Shape
+{
+	protected :	
+		bool hovered;
+		
+	public :
+		Button();
+		Button(SDL_Surface*, SDL_Rect, int);
+		~Button();
+		void show(SDL_Surface*);
+		void toggleHovered();
+		void toString();
 };
 
 ////////////////////////////////////	FIGURE ////////////////////////////////////////////////
