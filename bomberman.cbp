@@ -37,11 +37,10 @@
 			<Add directory="C:/Program Files (x86)/CodeBlocks/SDL-1.2.15/lib" />
 		</Linker>
 		<Unit filename="Bomber.cpp" />
+		<Unit filename="Button.cpp" />
 		<Unit filename="Classes.h" />
 		<Unit filename="Figure.cpp" />
-		<Unit filename="Functions.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="Functions.cpp" />
 		<Unit filename="Functions.h" />
 		<Unit filename="Header.h" />
 		<Unit filename="Shape.cpp" />

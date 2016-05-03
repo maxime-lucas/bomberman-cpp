@@ -7,7 +7,7 @@ class Shape
 {
 protected:
     SDL_Rect dimCoordSprite; //coordonnées dans l'image
-    SDL_Rect dimCoordShape; //coordonnées dans l'écran
+    SDL_Rect dimCoordEcran; //coordonnées dans l'écran
     SDL_Surface *sprite; //feuille de sprites stockée ici
     int nbSprites; //nombre de sprites (pour perso)
 
@@ -39,6 +39,16 @@ public:
     Bomber();
     ~Bomber();
     void show (SDL_Surface*);
+};
+
+class Button : public Shape
+{
+protected:
+public:
+    Button();
+    Button(SDL_Surface*,SDL_Rect,int);
+    ~Button();
+    void show(SDL_Surface*);
 };
 
 class Timer
