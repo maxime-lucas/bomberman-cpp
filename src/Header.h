@@ -27,4 +27,6 @@ const int EAST = 3;
 
 const int DEFAULT_SPEED = 100;
 
+const int FRAMES_PER_SECOND = 30;
+
 #endif

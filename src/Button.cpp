@@ -25,7 +25,11 @@ void Button::toString()
 	printf("sprite : %p\n", sprite);
 }
 
-void Button::toggleHovered()
+void Button::setHovered() { this->hovered = true; }
+void Button::unsetHovered() { this->hovered = false; }
+bool Button::isHovered(int MouseX, int MouseY)
 {
-	this->hovered = !this->hovered;
+	if( ( MouseX > this->getDimCoordEcranX() ) && ( MouseX < (this->getDimCoordEcranX() + this->getDimCoordSpriteW()) ) && ( MouseY > this->getDimCoordEcranY() ) && ( MouseY < (this->getDimCoordEcranY() + this->getDimCoordSpriteH()) ) )
+		return true;
+	return false;	
 }

@@ -3,9 +3,6 @@
 
 int main(int argc, char* argv[])
 {
-	bool quit = false;
-	SDL_Event event;
-	
 	SDL_Surface *ecran;
 	
 	SDL_Init(SDL_INIT_VIDEO);

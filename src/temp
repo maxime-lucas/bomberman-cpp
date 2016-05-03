@@ -1,4 +1,10 @@
-positionFondDansEcran.x = positionFondDansEcran.y = 0;
+		dimCoordStart.x = 15;
+    dimCoordStart.y = 420;
+
+    dimCoordQuit.x = 180;
+    dimCoordQuit.y = 420;
+		
+		positionFondDansEcran.x = positionFondDansEcran.y = 0;
     SDL_BlitSurface(fond ,NULL ,ecran ,&positionFondDansEcran); /*affichage dans le buffer*/
 
     char filename[64];

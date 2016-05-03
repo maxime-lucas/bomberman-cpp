@@ -16,6 +16,24 @@ class Shape
 		Shape(SDL_Surface*,SDL_Rect,int);
 		virtual ~Shape();
 		virtual void show(SDL_Surface*) = 0;
+		
+		void setDimCoordEcranX(int);
+		void setDimCoordEcranY(int);
+		void setDimCoordEcranW(int);
+		void setDimCoordEcranH(int);
+		int getDimCoordEcranX();
+		int getDimCoordEcranY();
+		int getDimCoordEcranW();
+		int getDimCoordEcranH();
+		
+		void setDimCoordSpriteX(int);
+		void setDimCoordSpriteY(int);
+		void setDimCoordSpriteW(int);
+		void setDimCoordSpriteH(int);
+		int getDimCoordSpriteX();
+		int getDimCoordSpriteY();
+		int getDimCoordSpriteW();
+		int getDimCoordSpriteH();
 };
 
 ////////////////////////////////////	BUTTON ////////////////////////////////////////////////
@@ -29,7 +47,9 @@ class Button : public Shape
 		Button(SDL_Surface*, SDL_Rect, int);
 		~Button();
 		void show(SDL_Surface*);
-		void toggleHovered();
+		void setHovered();
+		void unsetHovered();
+		bool isHovered(int, int);
 		void toString();
 };
 
