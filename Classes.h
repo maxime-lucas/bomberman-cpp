@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-class Shape
+class Shape /*classe abstraite dont seront dérivées toutes les autres classes*/
 {
 protected:
     SDL_Rect dimCoordSprite; //coordonnées dans l'image
@@ -12,46 +12,46 @@ protected:
     int nbSprites; //nombre de sprites (pour perso)
 
 public:
-    Shape();
-    Shape(SDL_Surface* , SDL_Rect , int);
-    virtual ~Shape();
-    virtual void show(SDL_Surface*) = 0;
+    Shape(); /*constructeur par défaut*/
+    Shape(SDL_Surface* , SDL_Rect , int); /*constructeur avec arguments*/
+    virtual ~Shape(); /*destructeur*/
+    virtual void show(SDL_Surface*) = 0; /*méthode virtual rendant la classe abstraite*/
 };
 
-class Figure : public Shape
+class Figure : public Shape /*classe figure mère des classes personnages*/
 {
 public:
-    Figure();
-    virtual ~Figure();
-    Figure(SDL_Surface* , SDL_Rect , int);
-    void show(SDL_Surface*);
+    Figure(); /*constructeur par défaut*/
+    virtual ~Figure(); /*destructeur*/
+    Figure(SDL_Surface* , SDL_Rect , int); /*constructeur paramétré*/
+    void show(SDL_Surface*); /*méthode d'affichage*/
 protected:
     int xVel , yVel; //taille du déplacement perso
-    int speed; //
+    int speed; //vitesse de déplacement du personnage
     int direction; //Noth = 0 , South = 1 , East = 2 , West = 3
 };
 
-class Bomber : public Figure
+class Bomber : public Figure /*classe du personnage Bomber dérivée de Figure*/
 {
 protected:
 
 public:
-    Bomber();
-    ~Bomber();
-    void show (SDL_Surface*);
+    Bomber(); /*constructeur par défaut*/
+    ~Bomber(); /*destructeur*/
+    void show (SDL_Surface*); /*méthode d'affichage*/
 };
 
-class Button : public Shape
+class Button : public Shape /*classe bouton dérivée de Shape*/
 {
 protected:
 public:
-    Button();
-    Button(SDL_Surface*,SDL_Rect,int);
-    ~Button();
-    void show(SDL_Surface*);
+    Button(); /*constructeur par défaut*/
+    Button(SDL_Surface*,SDL_Rect,int); /*constructeur paramétré*/
+    ~Button(); /*destructeur*/
+    void show(SDL_Surface*); /*méthode d'affichage*/
 };
 
-class Timer
+class Timer /*classe timer de gestion du temps*/
 {
     private:
     //Le temps quand le timer est lancé

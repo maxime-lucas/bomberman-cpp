@@ -4,7 +4,7 @@ int main(int argc, char *argv[])
 {
     SDL_Surface *ecran ; /*variable zone affichage*/
 
-    SDL_Event event;
+    SDL_Event event; /*variable d'évènement*/
 
     bool quit = false;
 
@@ -19,14 +19,15 @@ int main(int argc, char *argv[])
     FMOD_ChannelGroup_SetVolume(canaux ,0.5); /*réglage du volume de la musique*/
     FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, NULL); /* On joue la musique */
 
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO); /*démarrage de la librairie SDL*/
 
     ecran = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF); /*création de la fenêtre avec double buffering*/
     SDL_WM_SetCaption("Bomberman", NULL); /*nom de la fenêtre*/
 
-    Bomber *player1 = new Bomber();
+    //Bomber *player1 = new Bomber();
+    //player1->show(ecran);
 
-    player1->show(ecran);
+    start_screen(ecran);
 
     SDL_Flip(ecran);
 
@@ -46,7 +47,7 @@ int main(int argc, char *argv[])
     FMOD_System_Close(system); /*fermeture de l'objet son*/
     FMOD_System_Release(system); /*libération de l'objet son*/
 
-    SDL_Quit();
+    SDL_Quit(); /*fermeture de la librairie SDL*/
 
     return EXIT_SUCCESS;
 }
