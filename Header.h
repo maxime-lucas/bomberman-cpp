@@ -7,7 +7,7 @@
 #include <SDL_image.h>
 #include <fmodex/fmod.h>
 #include <SDL_ttf.h>
-#include "classes.h"
+#include "Classes.h"
 #include "Functions.h"
 
 const int SCREEN_WIDTH = 640; //constante largeur écran

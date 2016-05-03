@@ -2,14 +2,14 @@
 1462293879 source:d:\projets\c++\bomberman-cpp\main.cpp
 	"Header.h"
 
-1462292191 d:\projets\c++\bomberman-cpp\header.h
+1462295121 d:\projets\c++\bomberman-cpp\header.h
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
 	<SDL_image.h>
 	<fmodex/fmod.h>
 	<SDL_ttf.h>
-	"classes.h"
+	"Classes.h"
 	"Functions.h"
 
 1325742239 c:\program files (x86)\codeblocks\sdl-1.2.15\include\sdl.h
@@ -216,12 +216,12 @@
 1462293593 source:d:\projets\c++\bomberman-cpp\bomber.cpp
 	"Header.h"
 
-1462293848 d:\projets\c++\bomberman-cpp\classes.h
+1462295029 d:\projets\c++\bomberman-cpp\classes.h
 	"Header.h"
 
 1462292125 d:\projets\c++\bomberman-cpp\functions.h
 
-1462293863 source:d:\projets\c++\bomberman-cpp\figure.cpp
+1462294686 source:d:\projets\c++\bomberman-cpp\figure.cpp
 	"Header.h"
 
 1462294250 source:d:\projets\c++\bomberman-cpp\shape.cpp
