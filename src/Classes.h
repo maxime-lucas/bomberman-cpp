@@ -29,8 +29,8 @@ class Figure : public Shape
 	public :
 		Figure();
 		Figure(SDL_Surface*, SDL_Rect, int);
-		~Figure();
-		virtual void show(SDL_Surface*);
+		virtual ~Figure();
+		void show(SDL_Surface*);
 };
 
 ////////////////////////////////////	MARIO ////////////////////////////////////////////////

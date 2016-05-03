@@ -1,7 +1,9 @@
 #include "Header.h"
-#include "Classes.h"
 Shape::Shape()
 {
+	this->sprite = NULL;
+	this->nbSprites = 1;
+	
 	this->dimCoordShape.x = 0;
 	this->dimCoordShape.y = 0;
 }

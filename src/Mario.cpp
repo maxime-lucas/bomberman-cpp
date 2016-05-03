@@ -1,5 +1,4 @@
 #include "Header.h"
-#include "Classes.h"
 Mario::Mario() : Figure()
 {
 	this->sprite = IMG_Load("../img/sprite-player/sprite-mario.png");

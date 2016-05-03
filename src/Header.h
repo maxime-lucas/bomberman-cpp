@@ -12,6 +12,7 @@
 
 // Inclusions diverses
 #include "Functions.h"
+#include "Classes.h"
 
 // Constantes
 const int SCREEN_WIDTH = 640;

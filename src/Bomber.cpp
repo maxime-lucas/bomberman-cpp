@@ -1,5 +1,4 @@
 #include "Header.h"
-#include "Classes.h"
 Bomber::Bomber() : Figure()
 {
 	this->sprite = IMG_Load("../img/sprite-player/sprite-bomber-1.png");
