@@ -27,24 +27,28 @@ void Figure::MoveUp()
 {
     direction = NORTH;
     updateSprite();
+    dimCoordEcran.y -= yVel;
 }
 
 void Figure::MoveDown()
 {
     direction = SOUTH;
     updateSprite();
+    dimCoordEcran.y += yVel;
 }
 
 void Figure::MoveLeft()
 {
     direction = WEST;
     updateSprite();
+    dimCoordEcran.x -= xVel;
 }
 
 void Figure::MoveRight()
 {
     direction = EAST;
     updateSprite();
+    dimCoordEcran.x += xVel;
 }
 
 void Figure::updateSprite()
@@ -57,5 +61,6 @@ void Figure::updateSprite()
 void Figure::resetSprite()
 {
     direction = SOUTH;
+    dimCoordSprite.y = direction * dimCoordSprite.h;
     dimCoordSprite.x = 0;
 }

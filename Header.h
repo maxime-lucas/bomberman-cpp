@@ -19,9 +19,9 @@ const int SOUTH = 1; /*south = de face*/
 const int WEST = 2; /*west = tourné vers la gauche*/
 const int EAST = 3; /*east = tourné vers la droite*/
 
-const int DEFAULT_SPEED = 100; /*vitesse de déplacement par défaut*/
+const int DEFAULT_SPEED = 300; /*vitesse de déplacement par défaut*/
 
-const int FRAMES_PER_SECOND = 60;
+const int FRAMES_PER_SECOND = 30;
 
 
 #endif // HEADER_H_INCLUDED

@@ -34,6 +34,8 @@ class Shape
 		int getDimCoordSpriteY();
 		int getDimCoordSpriteW();
 		int getDimCoordSpriteH();
+
+		void setSprite(SDL_Surface*);
 };
 
 
@@ -49,6 +51,11 @@ public:
     void MoveLeft();
     void MoveRight();
     void resetSprite();
+    void setXvel(int x){ this->xVel = x; }
+    int getXvel() { return this->xVel; }
+    void setYvel(int y){ this->yVel = y; }
+    int getYvel() { return this->yVel; }
+    int getSpeed() { return this->speed; }
 protected:
     int xVel , yVel; //taille du déplacement perso
     int speed; //vitesse de déplacement du personnage

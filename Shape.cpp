@@ -39,3 +39,5 @@ int Shape::getDimCoordSpriteX() { return this->dimCoordSprite.x; }
 int Shape::getDimCoordSpriteY() { return this->dimCoordSprite.y; }
 int Shape::getDimCoordSpriteW() { return this->dimCoordSprite.w; }
 int Shape::getDimCoordSpriteH() { return this->dimCoordSprite.h; }
+
+void Shape::setSprite(SDL_Surface* sprite) { this->sprite = sprite; }
