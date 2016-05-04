@@ -1,5 +1,39 @@
 #include "Header.h"
 
+void UpdateEvents(Input* in) /*fonction de gestion des évènements clavier et souris*/
+{
+	SDL_Event event;
+	while(SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+		case SDL_KEYDOWN:
+			in->key[event.key.keysym.sym]=1; /*on stocke 1 pour une touche pressée*/
+			break;
+		case SDL_KEYUP:
+			in->key[event.key.keysym.sym]=0; /*et zéro pour touche relachée*/
+			break;
+		case SDL_MOUSEMOTION:
+			in->mousex=event.motion.x; /*on enregistre les coordonnées absolues du curseur souris*/
+			in->mousey=event.motion.y;
+			in->mousexrel=event.motion.xrel; /*on enregistre les coordonnées relatives du curseur souris*/
+			in->mouseyrel=event.motion.yrel;
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			in->mousebuttons[event.button.button]=1; /*1 pour bouton souris enfoncé*/
+			break;
+		case SDL_MOUSEBUTTONUP:
+			in->mousebuttons[event.button.button]=0; /*0 pour bouton souris relâché*/
+			break;
+		case SDL_QUIT:
+			in->quit = 1; /*pour quitter*/
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 /*fonction pour l'affichage de tous types de sprite à l'écran*/
 void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip = NULL )
 {

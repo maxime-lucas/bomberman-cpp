@@ -25,10 +25,15 @@ public:
     virtual ~Figure(); /*destructeur*/
     Figure(SDL_Surface* , SDL_Rect , int); /*constructeur paramétré*/
     void show(SDL_Surface*); /*méthode d'affichage*/
+    void MoveUp(); /*méthodes de déplacement du sprite*/
+    void MoveDown();
+    void MoveLeft();
+    void MoveRight();
 protected:
     int xVel , yVel; //taille du déplacement perso
     int speed; //vitesse de déplacement du personnage
     int direction; //Noth = 0 , South = 1 , East = 2 , West = 3
+    void updateSprite();
 };
 
 class Bomber : public Figure /*classe du personnage Bomber dérivée de Figure*/
