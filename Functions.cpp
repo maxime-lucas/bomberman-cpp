@@ -2,36 +2,36 @@
 
 void UpdateEvents(Input* in) /*fonction de gestion des évènements clavier et souris*/
 {
-	SDL_Event event;
-	while(SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-		case SDL_KEYDOWN:
-			in->key[event.key.keysym.sym]=1; /*on stocke 1 pour une touche pressée*/
-			break;
-		case SDL_KEYUP:
-			in->key[event.key.keysym.sym]=0; /*et zéro pour touche relachée*/
-			break;
-		case SDL_MOUSEMOTION:
-			in->mousex=event.motion.x; /*on enregistre les coordonnées absolues du curseur souris*/
-			in->mousey=event.motion.y;
-			in->mousexrel=event.motion.xrel; /*on enregistre les coordonnées relatives du curseur souris*/
-			in->mouseyrel=event.motion.yrel;
-			break;
-		case SDL_MOUSEBUTTONDOWN:
-			in->mousebuttons[event.button.button]=1; /*1 pour bouton souris enfoncé*/
-			break;
-		case SDL_MOUSEBUTTONUP:
-			in->mousebuttons[event.button.button]=0; /*0 pour bouton souris relâché*/
-			break;
-		case SDL_QUIT:
-			in->quit = 1; /*pour quitter*/
-			break;
-		default:
-			break;
-		}
-	}
+    SDL_Event event;
+    while(SDL_PollEvent(&event))
+    {
+        switch (event.type)
+        {
+            case SDL_KEYDOWN:
+                in->key[event.key.keysym.sym]=1; /*on stocke 1 pour une touche pressée*/
+                break;
+            case SDL_KEYUP:
+                in->key[event.key.keysym.sym]=0; /*et zéro pour touche relachée*/
+                break;
+            case SDL_MOUSEMOTION:
+                in->mousex=event.motion.x; /*on enregistre les coordonnées absolues du curseur souris*/
+                in->mousey=event.motion.y;
+                in->mousexrel=event.motion.xrel; /*on enregistre les coordonnées relatives du curseur souris*/
+                in->mouseyrel=event.motion.yrel;
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                in->mousebuttons[event.button.button]=1; /*1 pour bouton souris enfoncé*/
+                break;
+            case SDL_MOUSEBUTTONUP:
+                in->mousebuttons[event.button.button]=0; /*0 pour bouton souris relâché*/
+                break;
+            case SDL_QUIT:
+                in->quit = 1; /*pour quitter*/
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 /*fonction pour l'affichage de tous types de sprite à l'écran*/
@@ -48,97 +48,133 @@ void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect*
 
 void start_screen(SDL_Surface *ecran) /*page d'accueil du jeu*/
 {
-    SDL_Surface *fond ,*logo ; /*sprites ecran accueil*/
-    SDL_Rect positionFondDansEcran; /*variable pour position affichage dans écran*/
-    SDL_Rect dimCoordQuit ,dimCoordStart; /*coordonnées et dimensions des boutons*/
-    int boucle = 1; /*variable de sortie de boucle*/
-    SDL_Event event; /*variable évènement*/
+    // Vars
+    SDL_Surface *fondIMG ,*logoIMG ,*buttonStartIMG, *buttonQuitIMG; /*sprites ecran accueil*/
+    SDL_Rect dimCoordSprite; /*coordonnées et dimensions des boutons*/
 
-    fond = IMG_Load("img/start-screen/start.png"); /*chargement du fond d'écran*/
+    // Préparation du Timer pour les animations
+    Timer fps;
 
-    //Button *start = new Button(startButtonN ,dimCoordStart); /*creation d'un objet bouton pour start*/
-    //Button *quit = new Button(quitButtonN ,dimCoordQuit); /*création d'un objet bouton pour quit*/
-    //Button *startH = new Button(startButtonH ,dimCoordStart); /*création objet pour bouton start survolé*/
-    //Button *quitH = new Button(quitButtonH ,dimCoordQuit); /*création objet pour bouton quit survolé*/
+    // Chargement des images
+    buttonStartIMG = IMG_Load("img/start-screen/start-button.png"); /*chargement des boutons*/
+    buttonQuitIMG = IMG_Load("img/start-screen/quit-button.png");
+    fondIMG = IMG_Load("img/start-screen/start.png");
 
-    positionFondDansEcran.x = positionFondDansEcran.y = 0;
-    SDL_BlitSurface(fond ,NULL ,ecran ,&positionFondDansEcran); /*affichage dans le buffer*/
+    // Préparation de la structure pour les boutons
+    dimCoordSprite.x = 0;
+    dimCoordSprite.y = 0;
+    dimCoordSprite.w = 147;
+    dimCoordSprite.h = 48;
 
+    // Instanciation des boutons
+    Button *start = new Button(buttonStartIMG ,dimCoordSprite, 2); /*creation d'un objet bouton pour start*/
+    Button *quit = new Button(buttonQuitIMG , dimCoordSprite, 2); /*création d'un objet bouton pour quit*/
+
+    // Positionnement des boutons sur l'écran
+    start->setDimCoordEcranX(15);
+    start->setDimCoordEcranY(420);
+    quit->setDimCoordEcranX(180);
+    quit->setDimCoordEcranY(420);
+
+    // Animation du logo
     char filename[64];
     for (int i = 1 ; i <= 76 ; i++)
     {
+        fps.start();
+
         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
         sprintf(filename ,"img/start-screen/intro/%d.png" ,i);
-        logo = IMG_Load(filename);
-        SDL_BlitSurface(fond ,NULL ,ecran ,&positionFondDansEcran); /*affichage dans le buffer*/
-        SDL_BlitSurface(logo ,NULL ,ecran ,&positionFondDansEcran);
+        logoIMG = IMG_Load(filename);
+        apply_surface(0,0,fondIMG, ecran);
+        apply_surface(0,0,logoIMG, ecran);
         SDL_Flip(ecran);
+
+        while( fps.get_ticks() < 1000 / FRAMES_PER_SECOND ) {}
+
+        fps.stop();
     }
 
-    //start->show(ecran ,dimCoordStart); /*affichage de start dans le buffer*/
-    //quit->show(ecran ,dimCoordQuit); /*affichage de quit dans le buffer*/
+    // Affichage des boutons
+    start->show(ecran);
+    quit->show(ecran);
+    SDL_Flip(ecran);
 
-    SDL_Flip(ecran); /*affichage à l'écran*/
+    Input in;
+    memset(&in,0,sizeof(in));
+    // Gestion du survol des boutons
+    while(in.quit == 0)
+    {
+        UpdateEvents(&in);
+        // Mouvement de souris
 
-//    while(boucle) /*boucle pour attente d'évenement*/
-//    {
-//        SDL_PollEvent(&event);
-//        switch(event.type) /*switch des types d'evenements et actions à appliquer*/
-//        {
-//            case SDL_MOUSEMOTION: /*cas position de la souris*/
-//                /*si la souris se trouve sur le bouton start*/
-//                if ((event.motion.x > start->getDimCoordx() && event.motion.x < (start->getDimCoordx() + start->getDimCoordw())) && (event.motion.y > start->getDimCoordy() && event.motion.y < (start->getDimCoordy() + start->getDimCoordh()))) // Gestion vers la fonction play
-//                {
-//                    startH->print(ecran ,dimCoordStart); /*on affiche le bouton survolé*/
-//                    SDL_Flip(ecran);
-//                }
-//                else
-//                {
-//                    start->print(ecran ,dimCoordStart); /*sinon on affiche le bouton normal*/
-//                    SDL_Flip(ecran);
-//                }
-//                /*si la souris se trouve sur le bouton quit*/
-//                if ((event.motion.x > quit->getDimCoordx() && event.motion.x < (quit->getDimCoordx() + quit->getDimCoordw())) && (event.motion.y > quit->getDimCoordy() && event.motion.y < (quit->getDimCoordy() + quit->getDimCoordh()))) // Gestion vers la fonction play
-//                {
-//                    quitH->print(ecran ,dimCoordQuit); /*on affiche le bouton survolé*/
-//                    SDL_Flip(ecran);
-//                }
-//                else
-//                {
-//                    quit->print(ecran ,dimCoordQuit); /*sinon on affiche le bouton normal*/
-//                    SDL_Flip(ecran);
-//                }
-//                break;
-//            case SDL_MOUSEBUTTONUP:
-//                if (event.button.button == SDL_BUTTON_LEFT) /*cas click bouton gauche*/
-//                {
-//                    /*si on se trouve sur le bouton start*/
-//                    if ((event.button.x > start->getDimCoordx() && event.button.x < (start->getDimCoordx() + start->getDimCoordw())) && (event.button.y > start->getDimCoordy() && event.button.y < (start->getDimCoordy() + start->getDimCoordh())))
-//                    {
-//                        SDL_FreeSurface(fond); /*on libère tous les prites créés dans la fonction*/
-//                        SDL_FreeSurface(logo);
-//                        SDL_FreeSurface(startButtonH);
-//                        SDL_FreeSurface(startButtonN);
-//                        SDL_FreeSurface(quitButtonH);
-//                        SDL_FreeSurface(quitButtonN);
-//                        SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
-//                        SDL_Flip(ecran);
-//                        jouer(ecran); /*on lance la fonction jouer*/
-//                    }
-//                    /*si on se trouve sur le bouton quit*/
-//                    if ((event.button.x > quit->getDimCoordx() && event.button.x < (quit->getDimCoordx() + quit->getDimCoordw())) && (event.button.y > quit->getDimCoordy() && event.button.y < (quit->getDimCoordy() + quit->getDimCoordh())))
-//                        {
-//                            SDL_FreeSurface(fond); /*on libère tous les sprites créés dans la fonction*/
-//                            SDL_FreeSurface(logo);
-//                            SDL_FreeSurface(startButtonH);
-//                            SDL_FreeSurface(startButtonN);
-//                            SDL_FreeSurface(quitButtonH);
-//                            SDL_FreeSurface(quitButtonN);
-//                            SDL_FreeSurface(ecran);
-//                            boucle = 0; /*on quitte la page d'accueil et retour au main pour quitter le programme*/
-//                        }
-//                }
-//                break;
-//        }
-//    }
+        // Survol du bouton PLAY
+        if( start->isHovered( in.mousex, in.mousey ) )
+        {
+            start->setHovered(); /*on affiche le bouton survolé*/
+            start->show(ecran);
+            SDL_Flip(ecran);
+        }
+        else
+        {
+            start->unsetHovered(); /*on affiche le bouton survolé*/
+            start->show(ecran);
+            SDL_Flip(ecran);
+        }
+
+// Survol du bouton QUIT
+        if( quit->isHovered( in.mousex, in.mousey ) ) // Gestion vers la fonction play
+        {
+            quit->setHovered(); /*on affiche le bouton survolé*/
+            quit->show(ecran);
+            SDL_Flip(ecran);
+        }
+        else
+        {
+            quit->unsetHovered(); /*on affiche le bouton survolé*/
+            quit->show(ecran);
+            SDL_Flip(ecran);
+        }
+
+
+// Clic de la souric
+        if(in.mousebuttons[SDL_BUTTON_LEFT])
+        {
+// Clic du bouton PLAY
+            if( start->isHovered( in.mousex, in.mousey ) )
+            {
+                printf("Click PLAY\n"); // Gestion vers la fonction play
+                SDL_FreeSurface(buttonStartIMG);
+                SDL_FreeSurface(buttonQuitIMG);
+                SDL_FreeSurface(fondIMG);
+                SDL_FreeSurface(logoIMG);
+                SDL_FillRect(ecran , NULL, SDL_MapRGB(ecran->format , 0,0,0));
+                SDL_Flip(ecran);
+                jeu(ecran);
+            }
+
+// Clic du bouton QUIT
+            if( quit->isHovered( in.mousex, in.mousey ) )
+            {
+                printf("Click QUIT\n");
+
+// Nettoyage
+                SDL_FreeSurface(buttonStartIMG);
+                SDL_FreeSurface(buttonQuitIMG);
+                SDL_FreeSurface(fondIMG);
+                SDL_FreeSurface(logoIMG);
+                in.quit = 1;
+            }
+        }
+    }
+}
+
+void jeu(SDL_Surface * ecran)
+{
+    Bomber* player1 = new Bomber();
+    player1->show(ecran);
+    SDL_Flip(ecran);
+    while(1)
+    {
+
+    }
 }

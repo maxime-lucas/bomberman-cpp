@@ -3,20 +3,39 @@
 
 #include "Header.h"
 
-class Shape /*classe abstraite dont seront dérivées toutes les autres classes*/
+class Shape
 {
-protected:
-    SDL_Rect dimCoordSprite; //coordonnées dans l'image
-    SDL_Rect dimCoordEcran; //coordonnées dans l'écran
-    SDL_Surface *sprite; //feuille de sprites stockée ici
-    int nbSprites; //nombre de sprites (pour perso)
+	protected:
+		SDL_Rect dimCoordSprite; // Coordonnées dans l'image
+		SDL_Rect dimCoordEcran; // Coordonnées dans l'écran
+		SDL_Surface *sprite; // Feuille de sprite stockée ici
+		int nbSprites; // Nombre de sprites (surtout pour les personnages)
 
-public:
-    Shape(); /*constructeur par défaut*/
-    Shape(SDL_Surface* , SDL_Rect , int); /*constructeur avec arguments*/
-    virtual ~Shape(); /*destructeur*/
-    virtual void show(SDL_Surface*) = 0; /*méthode virtual rendant la classe abstraite*/
+	public:
+		Shape();
+		Shape(SDL_Surface*,SDL_Rect,int);
+		virtual ~Shape();
+		virtual void show(SDL_Surface*) = 0;
+
+		void setDimCoordEcranX(int);
+		void setDimCoordEcranY(int);
+		void setDimCoordEcranW(int);
+		void setDimCoordEcranH(int);
+		int getDimCoordEcranX();
+		int getDimCoordEcranY();
+		int getDimCoordEcranW();
+		int getDimCoordEcranH();
+
+		void setDimCoordSpriteX(int);
+		void setDimCoordSpriteY(int);
+		void setDimCoordSpriteW(int);
+		void setDimCoordSpriteH(int);
+		int getDimCoordSpriteX();
+		int getDimCoordSpriteY();
+		int getDimCoordSpriteW();
+		int getDimCoordSpriteH();
 };
+
 
 class Figure : public Shape /*classe figure mère des classes personnages*/
 {
@@ -29,11 +48,13 @@ public:
     void MoveDown();
     void MoveLeft();
     void MoveRight();
+    void resetSprite();
 protected:
     int xVel , yVel; //taille du déplacement perso
     int speed; //vitesse de déplacement du personnage
-    int direction; //Noth = 0 , South = 1 , East = 2 , West = 3
+    int direction; //North = 0 , South = 1 , East = 2 , West = 3
     void updateSprite();
+
 };
 
 class Bomber : public Figure /*classe du personnage Bomber dérivée de Figure*/
@@ -46,15 +67,22 @@ public:
     void show (SDL_Surface*); /*méthode d'affichage*/
 };
 
-class Button : public Shape /*classe bouton dérivée de Shape*/
+class Button : public Shape
 {
-protected:
-public:
-    Button(); /*constructeur par défaut*/
-    Button(SDL_Surface*,SDL_Rect,int); /*constructeur paramétré*/
-    ~Button(); /*destructeur*/
-    void show(SDL_Surface*); /*méthode d'affichage*/
+	protected :
+		bool hovered;
+
+	public :
+		Button();
+		Button(SDL_Surface*, SDL_Rect, int);
+		~Button();
+		void show(SDL_Surface*);
+		void setHovered();
+		void unsetHovered();
+		bool isHovered(int, int);
+		void toString();
 };
+
 
 class Timer /*classe timer de gestion du temps*/
 {

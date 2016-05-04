@@ -5,6 +5,8 @@ void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect*
 
 void start_screen(SDL_Surface *ecran); /*prototype de la fonction gérant la page d'accueil*/
 
+void jeu(SDL_Surface *ecran); /*prototype de la fonction jouer*/
+
 typedef struct /*structure de stockage des états clavier et souris*/
 {
 	char key[SDLK_LAST];

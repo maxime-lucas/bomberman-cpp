@@ -21,5 +21,7 @@ const int EAST = 3; /*east = tourné vers la droite*/
 
 const int DEFAULT_SPEED = 100; /*vitesse de déplacement par défaut*/
 
+const int FRAMES_PER_SECOND = 60;
+
 
 #endif // HEADER_H_INCLUDED

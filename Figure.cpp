@@ -53,3 +53,9 @@ void Figure::updateSprite()
     if ((dimCoordSprite.x += dimCoordSprite.w) >= (dimCoordSprite.w * nbSprites))
         dimCoordSprite.x = 0;
 }
+
+void Figure::resetSprite()
+{
+    direction = SOUTH;
+    dimCoordSprite.x = 0;
+}
