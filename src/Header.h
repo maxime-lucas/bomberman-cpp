@@ -25,7 +25,7 @@ const int SOUTH = 1;
 const int WEST = 2;
 const int EAST = 3;
 
-const int DEFAULT_SPEED = 100;
+const int DEFAULT_SPEED = 600;
 
 const int FRAMES_PER_SECOND = 30;
 

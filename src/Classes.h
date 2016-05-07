@@ -34,6 +34,8 @@ class Shape
 		int getDimCoordSpriteY();
 		int getDimCoordSpriteW();
 		int getDimCoordSpriteH();
+		
+		void setSprite(SDL_Surface *s) { sprite = s; };
 };
 
 ////////////////////////////////////	BUTTON ////////////////////////////////////////////////
@@ -60,12 +62,24 @@ class Figure : public Shape
 		int xVel, yVel; // Calcul
 		int speed; 
 		int direction; // NORTH = 0; SOUTH = 1; EAST = 2; WEST = 3	
+		void updateSprite();
 	
 	public :
 		Figure();
 		Figure(SDL_Surface*, SDL_Rect, int);
 		virtual ~Figure();
 		void show(SDL_Surface*);
+		void MoveUp();
+		void MoveDown();
+		void MoveLeft();
+		void MoveRight();
+		void resetSprite();
+		
+		int getXvel() { return xVel; };
+		int getYvel() { return yVel; };
+		int getSpeed() { return speed; };
+		void setXvel(int x) { xVel = x; };
+		void setYvel(int y) { yVel = y; };
 };
 
 ////////////////////////////////////	MARIO ////////////////////////////////////////////////

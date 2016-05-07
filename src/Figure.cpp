@@ -17,3 +17,45 @@ void Figure::show(SDL_Surface *dest)
 {
 	apply_surface( dimCoordEcran.x, dimCoordEcran.y, sprite, dest, &dimCoordSprite );
 }
+
+void Figure::MoveUp()
+{
+    direction = NORTH;
+    updateSprite();
+    dimCoordEcran.y -= yVel;
+}
+
+void Figure::MoveDown()
+{
+    direction = SOUTH;
+    updateSprite();
+    dimCoordEcran.y += yVel;
+}
+
+void Figure::MoveLeft()
+{
+    direction = WEST;
+    updateSprite();
+    dimCoordEcran.x -= xVel;
+}
+
+void Figure::MoveRight()
+{
+    direction = EAST;
+    updateSprite();
+    dimCoordEcran.x += xVel;
+}
+
+void Figure::updateSprite()
+{
+    dimCoordSprite.y = direction * dimCoordSprite.h;
+    if ((dimCoordSprite.x += dimCoordSprite.w) >= (dimCoordSprite.w * nbSprites))
+        dimCoordSprite.x = 0;
+}
+
+void Figure::resetSprite()
+{
+    direction = SOUTH;
+    dimCoordSprite.y = direction * dimCoordSprite.h;
+    dimCoordSprite.x = 0;
+}
