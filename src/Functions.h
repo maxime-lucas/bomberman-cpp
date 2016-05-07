@@ -1,7 +1,13 @@
 #ifndef FUNCTIONS_H_INCLUDED
 #define FUNCTIONS_H_INCLUDED
 
-typedef struct /*structure de stockage des Ã©tats clavier et souris*/
+void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip ); /*prototype de la fonction d'affichage*/
+
+void start_screen(SDL_Surface *ecran); /*prototype de la fonction gérant la page d'accueil*/
+
+void jeu(SDL_Surface *ecran); /*prototype de la fonction jouer*/
+
+typedef struct /*structure de stockage des états clavier et souris*/
 {
 	char key[SDLK_LAST];
 	int mousex,mousey;
@@ -10,7 +16,7 @@ typedef struct /*structure de stockage des Ã©tats clavier et souris*/
         char quit;
 } Input;
 
-void UpdateEvents(Input* in); /*fonction de gestion des Ã©vÃ¨nements clavier et souris*/
-void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip);
-void start_screen(SDL_Surface *ecran);
-#endif
+
+void UpdateEvents(Input* in); /*fonction de gestion des évènements clavier et souris*/
+
+#endif // FUNCTIONS_H_INCLUDED

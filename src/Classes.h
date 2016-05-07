@@ -2,21 +2,21 @@
 #define CLASSES_H_INCLUDED
 
 #include "Header.h"
-////////////////////////////////////	SHAPE	////////////////////////////////////////////////
+
 class Shape
 {
-	protected: 
-		SDL_Rect dimCoordSprite; // CoordonnÃ©es dans l'image
-		SDL_Rect dimCoordEcran; // CoordonnÃ©es dans l'Ã©cran
-		SDL_Surface *sprite; // Feuille de sprite stockÃ©e ici
+	protected:
+		SDL_Rect dimCoordSprite; // Coordonnées dans l'image
+		SDL_Rect dimCoordEcran; // Coordonnées dans l'écran
+		SDL_Surface *sprite; // Feuille de sprite stockée ici
 		int nbSprites; // Nombre de sprites (surtout pour les personnages)
-		
+
 	public:
 		Shape();
 		Shape(SDL_Surface*,SDL_Rect,int);
 		virtual ~Shape();
 		virtual void show(SDL_Surface*) = 0;
-		
+
 		void setDimCoordEcranX(int);
 		void setDimCoordEcranY(int);
 		void setDimCoordEcranW(int);
@@ -25,7 +25,7 @@ class Shape
 		int getDimCoordEcranY();
 		int getDimCoordEcranW();
 		int getDimCoordEcranH();
-		
+
 		void setDimCoordSpriteX(int);
 		void setDimCoordSpriteY(int);
 		void setDimCoordSpriteW(int);
@@ -34,16 +34,51 @@ class Shape
 		int getDimCoordSpriteY();
 		int getDimCoordSpriteW();
 		int getDimCoordSpriteH();
-		
-		void setSprite(SDL_Surface *s) { sprite = s; };
+
+		void setSprite(SDL_Surface*);
 };
 
-////////////////////////////////////	BUTTON ////////////////////////////////////////////////
+
+class Figure : public Shape /*classe figure mère des classes personnages*/
+{
+public:
+    Figure(); /*constructeur par défaut*/
+    virtual ~Figure(); /*destructeur*/
+    Figure(SDL_Surface* , SDL_Rect , int); /*constructeur paramétré*/
+    void show(SDL_Surface*); /*méthode d'affichage*/
+    void MoveUp(); /*méthodes de déplacement du sprite*/
+    void MoveDown();
+    void MoveLeft();
+    void MoveRight();
+    void resetSprite();
+    void setXvel(int x){ this->xVel = x; }
+    int getXvel() { return this->xVel; }
+    void setYvel(int y){ this->yVel = y; }
+    int getYvel() { return this->yVel; }
+    int getSpeed() { return this->speed; }
+protected:
+    int xVel , yVel; //taille du déplacement perso
+    int speed; //vitesse de déplacement du personnage
+    int direction; //North = 0 , South = 1 , East = 2 , West = 3
+    void updateSprite();
+
+};
+
+class Bomber : public Figure /*classe du personnage Bomber dérivée de Figure*/
+{
+protected:
+
+public:
+    Bomber(); /*constructeur par défaut*/
+    ~Bomber(); /*destructeur*/
+    void show (SDL_Surface*); /*méthode d'affichage*/
+};
+
 class Button : public Shape
 {
-	protected :	
+	protected :
 		bool hovered;
-		
+
 	public :
 		Button();
 		Button(SDL_Surface*, SDL_Rect, int);
@@ -55,63 +90,14 @@ class Button : public Shape
 		void toString();
 };
 
-////////////////////////////////////	FIGURE ////////////////////////////////////////////////
-class Figure : public Shape
-{
-	protected :
-		int xVel, yVel; // Calcul
-		int speed; 
-		int direction; // NORTH = 0; SOUTH = 1; EAST = 2; WEST = 3	
-		void updateSprite();
-	
-	public :
-		Figure();
-		Figure(SDL_Surface*, SDL_Rect, int);
-		virtual ~Figure();
-		void show(SDL_Surface*);
-		void MoveUp();
-		void MoveDown();
-		void MoveLeft();
-		void MoveRight();
-		void resetSprite();
-		
-		int getXvel() { return xVel; };
-		int getYvel() { return yVel; };
-		int getSpeed() { return speed; };
-		void setXvel(int x) { xVel = x; };
-		void setYvel(int y) { yVel = y; };
-};
 
-////////////////////////////////////	MARIO ////////////////////////////////////////////////
-class Mario : public Figure
-{
-	protected :
-	
-	public :
-		Mario();
-		~Mario();
-		void show(SDL_Surface*);
-};
-
-////////////////////////////////////	BOMBER ////////////////////////////////////////////////
-class Bomber : public Figure
-{
-	protected :
-	
-	public :
-		Bomber();
-		~Bomber();
-		void show(SDL_Surface*);
-};
-
-////////////////////////////////////	TIMER	////////////////////////////////////////////////
-class Timer
+class Timer /*classe timer de gestion du temps*/
 {
     private:
-    // Le temps quand le timer est lancÃ©
+    //Le temps quand le timer est lancé
     int startTicks;
 
-    // Les "ticks" enregistrÃ©s quand le Timer a Ã©tÃ© mit en pause
+    //Les "ticks" enregistré quand le Timer a été mit en pause
     int pausedTicks;
 
     //Le status du Timer
@@ -122,20 +108,19 @@ class Timer
     //Initialise les variables
     Timer();
 
-    //Les diffÃ©rentes actions du timer
+    //Les différentes actions du timer
     void start();
     void stop();
     void pause();
     void unpause();
 
-    //recupÃ©re le nombre de ticks depuis que le timer a Ã©tÃ© lancÃ©
-    //ou rÃ©cupÃ©re le nombre de ticks depuis que le timer a Ã©tÃ© mis en pause
+    //recupére le nombre de ticks depuis que le timer a été lancé
+    //ou récupére le nombre de ticks depuis que le timer a été mis en pause
     int get_ticks();
 
-    //Fonctions de vÃ©rification du status du timer
+    //Fonctions de vérification du status du timer
     bool is_started();
     bool is_paused();
 };
 
-#endif
-
+#endif // CLASSES_H_INCLUDED
