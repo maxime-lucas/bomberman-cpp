@@ -1,6 +1,6 @@
 #include "Header.h"
 
-// Fonction pour gérer 
+// Fonction pour gérer
 void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip = NULL )
 {
     SDL_Rect offset;
@@ -20,14 +20,14 @@ void start_screen(SDL_Surface *ecran)
 
     // Préparation du Timer pour les animations
     Timer fps;
-    
+
     // Préparation de l'objet permettant de gérer les événements
     Input in;
 
     // Chargement des images
-    buttonStartIMG = IMG_Load("../img/start-screen/start-button.png");
-    buttonQuitIMG = IMG_Load("../img/start-screen/quit-button.png");
-    fondIMG = IMG_Load("../img/start-screen/start.png");
+    buttonStartIMG = IMG_Load("img/start-screen/start-button.png");
+    buttonQuitIMG = IMG_Load("img/start-screen/quit-button.png");
+    fondIMG = IMG_Load("img/start-screen/start.png");
 
     // Préparation de la structure pour les boutons
     dimCoordSprite.x = 0;
@@ -72,7 +72,7 @@ void start_screen(SDL_Surface *ecran)
     while(!in.getQuit())
     {
         in.Update();
-        
+
         // Survol du bouton PLAY
         if( start->isHovered( in.getMouseX(), in.getMouseY() ) )
         {
@@ -113,15 +113,15 @@ void start_screen(SDL_Surface *ecran)
                 SDL_FreeSurface(buttonQuitIMG);
                 SDL_FreeSurface(fondIMG);
                 SDL_FreeSurface(logoIMG);
-                
+
                 // Reset de l'écran
                 SDL_FillRect(ecran , NULL, SDL_MapRGB(ecran->format , 0,0,0));
                 SDL_Flip(ecran);
-                
+
                 // Lancement du jeu
                 //jeu(ecran);
-                
-                // Fin de la boucle 
+
+                // Fin de la boucle
                 in.setQuit(1);
             }
 
@@ -133,7 +133,7 @@ void start_screen(SDL_Surface *ecran)
                 SDL_FreeSurface(buttonQuitIMG);
                 SDL_FreeSurface(fondIMG);
                 SDL_FreeSurface(logoIMG);
-                
+
                 // Fin de la boucle
                 in.setQuit(1);
             }
@@ -183,7 +183,7 @@ bool checkCollision( SDL_Rect a, SDL_Rect b )
 
     return true;
 }
- 
+
 void init(SDL_Surface** s)
 {
 	SDL_Init(SDL_INIT_VIDEO);
