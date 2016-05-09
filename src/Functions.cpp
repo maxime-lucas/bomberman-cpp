@@ -1,64 +1,33 @@
 #include "Header.h"
 
-void UpdateEvents(Input* in) /*fonction de gestion des évènements clavier et souris*/
-{
-    SDL_Event event;
-    while(SDL_PollEvent(&event))
-    {
-        switch (event.type)
-        {
-            case SDL_KEYDOWN:
-                in->key[event.key.keysym.sym]=1; /*on stocke 1 pour une touche pressée*/
-                break;
-            case SDL_KEYUP:
-                in->key[event.key.keysym.sym]=0; /*et zéro pour touche relachée*/
-                break;
-            case SDL_MOUSEMOTION:
-                in->mousex=event.motion.x; /*on enregistre les coordonnées absolues du curseur souris*/
-                in->mousey=event.motion.y;
-                in->mousexrel=event.motion.xrel; /*on enregistre les coordonnées relatives du curseur souris*/
-                in->mouseyrel=event.motion.yrel;
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-                in->mousebuttons[event.button.button]=1; /*1 pour bouton souris enfoncé*/
-                break;
-            case SDL_MOUSEBUTTONUP:
-                in->mousebuttons[event.button.button]=0; /*0 pour bouton souris relâché*/
-                break;
-            case SDL_QUIT:
-                in->quit = 1; /*pour quitter*/
-                break;
-            default:
-                break;
-        }
-    }
-}
-
-/*fonction pour l'affichage de tous types de sprite à l'écran*/
+// Fonction pour gérer 
 void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip = NULL )
 {
     SDL_Rect offset;
 
-    offset.x = x; /*coordonnée X*/
-    offset.y = y; /*coordonnée Y*/
+    offset.x = x;
+    offset.y = y;
 
     //On blitte la surface
-    SDL_BlitSurface( src, clip, dest, &offset ); /*on blit dans l'écran (affiche)*/
+    SDL_BlitSurface( src, clip, dest, &offset );
 }
 
-void start_screen(SDL_Surface *ecran) /*page d'accueil du jeu*/
+void start_screen(SDL_Surface *ecran)
 {
     // Vars
-    SDL_Surface *fondIMG ,*logoIMG ,*buttonStartIMG, *buttonQuitIMG; /*sprites ecran accueil*/
-    SDL_Rect dimCoordSprite; /*coordonnées et dimensions des boutons*/
+    SDL_Surface *fondIMG ,*logoIMG ,*buttonStartIMG, *buttonQuitIMG;
+    SDL_Rect dimCoordSprite;
 
     // Préparation du Timer pour les animations
     Timer fps;
+    
+    // Préparation de l'objet permettant de gérer les événements
+    Input in;
 
     // Chargement des images
-    buttonStartIMG = IMG_Load("img/start-screen/start-button.png"); /*chargement des boutons*/
-    buttonQuitIMG = IMG_Load("img/start-screen/quit-button.png");
-    fondIMG = IMG_Load("img/start-screen/start.png");
+    buttonStartIMG = IMG_Load("../img/start-screen/start-button.png");
+    buttonQuitIMG = IMG_Load("../img/start-screen/quit-button.png");
+    fondIMG = IMG_Load("../img/start-screen/start.png");
 
     // Préparation de la structure pour les boutons
     dimCoordSprite.x = 0;
@@ -67,8 +36,8 @@ void start_screen(SDL_Surface *ecran) /*page d'accueil du jeu*/
     dimCoordSprite.h = 48;
 
     // Instanciation des boutons
-    Button *start = new Button(buttonStartIMG ,dimCoordSprite, 2); /*creation d'un objet bouton pour start*/
-    Button *quit = new Button(buttonQuitIMG , dimCoordSprite, 2); /*création d'un objet bouton pour quit*/
+    Button *start = new Button(buttonStartIMG ,dimCoordSprite, 2);
+    Button *quit = new Button(buttonQuitIMG , dimCoordSprite, 2);
 
     // Positionnement des boutons sur l'écran
     start->setDimCoordEcranX(15);
@@ -83,7 +52,7 @@ void start_screen(SDL_Surface *ecran) /*page d'accueil du jeu*/
         fps.start();
 
         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
-        sprintf(filename ,"img/start-screen/intro/%d.png" ,i);
+        sprintf(filename ,"../img/start-screen/intro/%d.png" ,i);
         logoIMG = IMG_Load(filename);
         apply_surface(0,0,fondIMG, ecran);
         apply_surface(0,0,logoIMG, ecran);
@@ -99,155 +68,125 @@ void start_screen(SDL_Surface *ecran) /*page d'accueil du jeu*/
     quit->show(ecran);
     SDL_Flip(ecran);
 
-    Input in;
-    memset(&in,0,sizeof(in));
     // Gestion du survol des boutons
-    while(in.quit == 0)
+    while(!in.getQuit())
     {
-        UpdateEvents(&in);
-        // Mouvement de souris
-
+        in.Update();
+        
         // Survol du bouton PLAY
-        if( start->isHovered( in.mousex, in.mousey ) )
+        if( start->isHovered( in.getMouseX(), in.getMouseY() ) )
         {
-            start->setHovered(); /*on affiche le bouton survolé*/
+            start->setHovered();
             start->show(ecran);
             SDL_Flip(ecran);
         }
         else
         {
-            start->unsetHovered(); /*on affiche le bouton survolé*/
+            start->unsetHovered();
             start->show(ecran);
             SDL_Flip(ecran);
         }
 
         // Survol du bouton QUIT
-        if( quit->isHovered( in.mousex, in.mousey ) ) // Gestion vers la fonction play
+        if( quit->isHovered( in.getMouseX(), in.getMouseY() ) )
         {
-            quit->setHovered(); /*on affiche le bouton survolé*/
+            quit->setHovered();
             quit->show(ecran);
             SDL_Flip(ecran);
         }
         else
         {
-            quit->unsetHovered(); /*on affiche le bouton survolé*/
+            quit->unsetHovered();
             quit->show(ecran);
             SDL_Flip(ecran);
         }
 
 
-        // Clic de la souric
-        if(in.mousebuttons[SDL_BUTTON_LEFT])
+        // Clic de la souris
+        if (in.getMouseButton(SDL_BUTTON_LEFT) )
         {
             // Clic du bouton PLAY
-            if( start->isHovered( in.mousex, in.mousey ) )
+            if( start->isHovered( in.getMouseX(), in.getMouseY() ) )
             {
-                printf("Click PLAY\n"); // Gestion vers la fonction play
-                SDL_FreeSurface(buttonStartIMG);
-                SDL_FreeSurface(buttonQuitIMG);
-                SDL_FreeSurface(fondIMG);
-                SDL_FreeSurface(logoIMG);
-                SDL_FillRect(ecran , NULL, SDL_MapRGB(ecran->format , 0,0,0));
-                SDL_Flip(ecran);
-                jeu(ecran);
-            }
-
-            // Clic du bouton QUIT
-            if( quit->isHovered( in.mousex, in.mousey ) )
-            {
-                printf("Click QUIT\n");
-
                 // Nettoyage
                 SDL_FreeSurface(buttonStartIMG);
                 SDL_FreeSurface(buttonQuitIMG);
                 SDL_FreeSurface(fondIMG);
                 SDL_FreeSurface(logoIMG);
-                in.quit = 1;
+                
+                // Reset de l'écran
+                SDL_FillRect(ecran , NULL, SDL_MapRGB(ecran->format , 0,0,0));
+                SDL_Flip(ecran);
+                
+                // Lancement du jeu
+                //jeu(ecran);
+                
+                // Fin de la boucle 
+                in.setQuit(1);
+            }
+
+            // Clic du bouton QUIT
+            if( quit->isHovered( in.getMouseX(), in.getMouseY() ) )
+            {
+                // Nettoyage
+                SDL_FreeSurface(buttonStartIMG);
+                SDL_FreeSurface(buttonQuitIMG);
+                SDL_FreeSurface(fondIMG);
+                SDL_FreeSurface(logoIMG);
+                
+                // Fin de la boucle
+                in.setQuit(1);
             }
         }
     }
 }
 
-void jeu(SDL_Surface * ecran)
+bool checkCollision( SDL_Rect a, SDL_Rect b )
 {
-    Input in;
-    Timer fps;
-    memset(&in,0,sizeof(in));
+    // Les côtés des rectangles
+    int leftA, leftB;
+    int rightA, rightB;
+    int topA, topB;
+    int bottomA, bottomB;
 
-    Bomber* player1 = new Bomber();
-    Bomber* player2 = new Bomber();
-    player2->setDimCoordEcranX(600);
-    player2->setSprite(IMG_Load("img/sprite-player/player2.png"));
-    player1->show(ecran);
-    player2->show(ecran);
-    SDL_Flip(ecran);
+    // Côtes de A
+    leftA = a.x;
+    rightA = a.x + a.w;
+    topA = a.y;
+    bottomA = a.y + a.h;
 
-    while(in.quit == 0)
+    // Côtes de B
+    leftB = b.x;
+    rightB = b.x + b.w;
+    topB = b.y;
+    bottomB = b.y + b.h;
+
+    if( bottomA <= topB )
     {
-        fps.start();
-        UpdateEvents(&in);
-
-        /*Touches joueur 2*/
-
-        if (in.key[SDLK_DOWN] && !in.key[SDLK_UP] && !in.key[SDLK_LEFT] && !in.key[SDLK_RIGHT])
-        {
-            player2->setYvel((player2->getSpeed() / (FRAMES_PER_SECOND)));
-            player2->MoveDown();
-        }
-        if (in.key[SDLK_LEFT] && !in.key[SDLK_UP] && !in.key[SDLK_DOWN] && !in.key[SDLK_RIGHT])
-        {
-            player2->setXvel((player2->getSpeed() / (FRAMES_PER_SECOND)));
-            player2->MoveLeft();
-        }
-        if (in.key[SDLK_RIGHT] && !in.key[SDLK_UP] && !in.key[SDLK_LEFT] && !in.key[SDLK_DOWN])
-        {
-            player2->setXvel((player2->getSpeed() / (FRAMES_PER_SECOND)));
-            player2->MoveRight();
-        }
-        if (in.key[SDLK_UP] && !in.key[SDLK_DOWN] && !in.key[SDLK_LEFT] && !in.key[SDLK_RIGHT])
-        {
-            player2->setYvel((player2->getSpeed() / (FRAMES_PER_SECOND)));
-            player2->MoveUp();
-        }
-        if (!in.key[SDLK_DOWN] && !in.key[SDLK_UP] && !in.key[SDLK_LEFT] && !in.key[SDLK_RIGHT])
-        {
-            player2->resetSprite();
-        }
-
-        /*Touches Joueur 1*/
-
-        if (in.key[SDLK_s] && !in.key[SDLK_w] && !in.key[SDLK_a] && !in.key[SDLK_d])
-        {
-            player1->setYvel((player1->getSpeed() / (FRAMES_PER_SECOND)));
-            player1->MoveDown();
-        }
-        if (in.key[SDLK_a] && !in.key[SDLK_w] && !in.key[SDLK_s] && !in.key[SDLK_d])
-        {
-            player1->setXvel((player1->getSpeed() / (FRAMES_PER_SECOND)));
-            player1->MoveLeft();
-        }
-        if (in.key[SDLK_d] && !in.key[SDLK_w] && !in.key[SDLK_a] && !in.key[SDLK_s])
-        {
-            player1->setXvel((player1->getSpeed() / (FRAMES_PER_SECOND)));
-            player1->MoveRight();
-        }
-        if (in.key[SDLK_w] && !in.key[SDLK_s] && !in.key[SDLK_a] && !in.key[SDLK_d])
-        {
-            player1->setYvel((player1->getSpeed() / (FRAMES_PER_SECOND)));
-            player1->MoveUp();
-        }
-        if (!in.key[SDLK_s] && !in.key[SDLK_w] && !in.key[SDLK_a] && !in.key[SDLK_d])
-        {
-            player1->resetSprite();
-        }
-
-        SDL_FillRect(ecran , NULL, SDL_MapRGB(ecran->format , 0,0,0));
-        player1->show(ecran);
-        player2->show(ecran);
-        SDL_Flip(ecran);
-        while(fps.get_ticks() < 2000/FRAMES_PER_SECOND)
-        {
-
-        }
+        return false;
     }
+
+    if( topA >= bottomB )
+    {
+        return false;
+    }
+
+    if( rightA <= leftB )
+    {
+        return false;
+    }
+
+    if( leftA >= rightB )
+    {
+        return false;
+    }
+
+    return true;
+}
+ 
+void init(SDL_Surface** s)
+{
+	SDL_Init(SDL_INIT_VIDEO);
+	*s = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	SDL_WM_SetCaption("Bomberman", NULL);
 }

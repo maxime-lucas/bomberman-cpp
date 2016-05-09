@@ -39,40 +39,48 @@ class Shape
 };
 
 
-class Figure : public Shape /*classe figure mère des classes personnages*/
+class Figure : public Shape
 {
-public:
-    Figure(); /*constructeur par défaut*/
-    virtual ~Figure(); /*destructeur*/
-    Figure(SDL_Surface* , SDL_Rect , int); /*constructeur paramétré*/
-    void show(SDL_Surface*); /*méthode d'affichage*/
-    void MoveUp(); /*méthodes de déplacement du sprite*/
-    void MoveDown();
-    void MoveLeft();
-    void MoveRight();
-    void resetSprite();
-    void setXvel(int x){ this->xVel = x; }
-    int getXvel() { return this->xVel; }
-    void setYvel(int y){ this->yVel = y; }
-    int getYvel() { return this->yVel; }
-    int getSpeed() { return this->speed; }
-protected:
-    int xVel , yVel; //taille du déplacement perso
-    int speed; //vitesse de déplacement du personnage
-    int direction; //North = 0 , South = 1 , East = 2 , West = 3
-    void updateSprite();
+	protected:
+	    int xVel , yVel; // Vecteurs vitesse du personnage
+	    int speed; // vitesse de déplacement du personnage
+	    int direction; //North = 0 , South = 1 , East = 2 , West = 3
+	    void updateSprite();
+	    SDL_Rect box;
+	    void updateBox();
+	
+	public:
+		Figure();
+		Figure(SDL_Surface* , SDL_Rect , int);
+		virtual ~Figure();
+		void show(SDL_Surface*);
 
+		// Déplacement du sprite
+		void MoveUp();
+		void MoveDown();
+		void MoveLeft();
+		void MoveRight();
+		void resetSprite();
+
+		// Accesseurs
+		void setXvel(int x){ this->xVel = x; }
+		int getXvel() { return this->xVel; }
+		void setYvel(int y){ this->yVel = y; }
+		int getYvel() { return this->yVel; }
+		int getSpeed() { return this->speed; }
+		SDL_Rect getBox(){ return this->box; }
+		void setBox(SDL_Rect box){ this->box = box; }
 };
 
-class Bomber : public Figure /*classe du personnage Bomber dérivée de Figure*/
+class Bomber : public Figure
 {
-protected:
+	protected:
 
-public:
-    Bomber(); /*constructeur par défaut*/
-    ~Bomber(); /*destructeur*/
-    void show (SDL_Surface*); /*méthode d'affichage*/
-};
+	public:
+	    Bomber();
+	    ~Bomber();
+	    void show (SDL_Surface*);
+	};
 
 class Button : public Shape
 {
@@ -91,36 +99,121 @@ class Button : public Shape
 };
 
 
-class Timer /*classe timer de gestion du temps*/
+class Timer
 {
-    private:
-    //Le temps quand le timer est lancé
-    int startTicks;
+	private:
+		//Le temps quand le timer est lancé
+		int startTicks;
 
-    //Les "ticks" enregistré quand le Timer a été mit en pause
-    int pausedTicks;
+		//Les "ticks" enregistré quand le Timer a été mit en pause
+		int pausedTicks;
 
-    //Le status du Timer
-    bool paused;
-    bool started;
+		//Le status du Timer
+		bool paused;
+		bool started;
 
-    public:
-    //Initialise les variables
-    Timer();
+	public:
+		//Initialise les variables
+		Timer();
 
-    //Les différentes actions du timer
-    void start();
-    void stop();
-    void pause();
-    void unpause();
+		//Les différentes actions du timer
+		void start();
+		void stop();
+		void pause();
+		void unpause();
 
-    //recupére le nombre de ticks depuis que le timer a été lancé
-    //ou récupére le nombre de ticks depuis que le timer a été mis en pause
-    int get_ticks();
+		//recupére le nombre de ticks depuis que le timer a été lancé
+		//ou récupére le nombre de ticks depuis que le timer a été mis en pause
+		int get_ticks();
 
-    //Fonctions de vérification du status du timer
-    bool is_started();
-    bool is_paused();
+		//Fonctions de vérification du status du timer
+		bool is_started();
+		bool is_paused();
 };
+
+class Input
+{
+	protected:
+		char key[SDLK_LAST];
+		int mouseX, mouseY;
+		int mouseXRel, mouseYRel;
+		char mouseButtons[8];
+		char quit;
+	
+	public:
+		Input();
+		~Input();
+		void Update();
+		char& getKey(int i) { return key[i]; }
+		int getMouseX(){ return mouseX; }	
+		int getMouseY(){ return mouseY; }	
+		int getMouseXRel(){ return mouseXRel; }
+		int getMouseYRel(){ return mouseYRel; }
+		int getMouseButton(int i){ return mouseButtons[i]; }
+		int getQuit(){ return quit; }
+		void setQuit(int i){this->quit = i; }
+};
+
+class TileSet
+{
+	protected :
+		SDL_Rect clips[  NB_TILES_WIDTH *  NB_TILES_HEIGHT ];
+		SDL_Surface *tileSet;
+		
+	public :
+		TileSet();
+		SDL_Rect getClip(int i) { return this->clips[i]; }
+		SDL_Surface* getTileSet() { return this->tileSet; }
+};
+
+class Tile
+{
+	protected :
+		SDL_Rect box;
+		int type;
+		
+	public:
+		Tile( int, int, int);
+		void show(TileSet*, SDL_Surface*);
+		int getType();
+		SDL_Rect getBox();
+};
+
+class TileMap
+{
+	protected :
+		void **tab;
+		int nb;
+	public :
+		TileMap();
+		TileMap& operator=(const TileMap&);
+		~TileMap();
+		void add(void *);
+		void draw(TileSet*, SDL_Surface* );
+		
+		void* get(int i) { return tab[i]; }
+		int getNb(){ return nb; }
+};
+
+class Game
+{
+	protected :
+		TileMap *mapBackground;
+		TileMap *mapWalls;
+		TileSet *tileSet;
+		SDL_Surface* ecran;
+		Figure players[NB_PLAYERS];
+		
+	public :
+		Game(SDL_Surface*);
+		Game(SDL_Surface*, Figure[]);
+		void setupGame();
+		void evolue(Input&);
+		void render();
+		void flip();
+		
+		bool touchesTile( SDL_Rect , TileMap* , int );
+};
+
 
 #endif // CLASSES_H_INCLUDED
