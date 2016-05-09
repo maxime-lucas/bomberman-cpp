@@ -1,24 +1,23 @@
 #include "Header.h"
 
-Figure::Figure() : Shape() /*constructeur pour les personnages*/
+Figure::Figure() : Shape()
 {
-    this->direction = SOUTH; /*orientation de départ des personnages*/
+    this->direction = SOUTH;
 
-    this->xVel = 0; /*vitesse de déplacement en X*/
-    this->yVel = 0; /*vitesse de déplacement en Y*/
+    this->xVel = 0;
+    this->yVel = 0;
 
-    this->speed = DEFAULT_SPEED; /*vitesse de déplacement ici celle par défaut*/
+    this->speed = DEFAULT_SPEED; 
 }
 
-Figure::Figure(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb) /*constructeur paramétré*/
+Figure::Figure(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb)
+{}
+
+Figure::~Figure()
 {
 }
 
-Figure::~Figure() /*destructeur*/
-{
-}
-
-void Figure::show(SDL_Surface *dest) /*méthode d'affichage*/
+void Figure::show(SDL_Surface *dest)
 {
     apply_surface(dimCoordEcran.x , dimCoordEcran.y , sprite, dest ,&dimCoordSprite);
 }
@@ -28,6 +27,7 @@ void Figure::MoveUp()
     direction = NORTH;
     updateSprite();
     dimCoordEcran.y -= yVel;
+    updateBox();
 }
 
 void Figure::MoveDown()
@@ -35,6 +35,7 @@ void Figure::MoveDown()
     direction = SOUTH;
     updateSprite();
     dimCoordEcran.y += yVel;
+    updateBox();
 }
 
 void Figure::MoveLeft()
@@ -42,6 +43,7 @@ void Figure::MoveLeft()
     direction = WEST;
     updateSprite();
     dimCoordEcran.x -= xVel;
+    updateBox();
 }
 
 void Figure::MoveRight()
@@ -49,6 +51,7 @@ void Figure::MoveRight()
     direction = EAST;
     updateSprite();
     dimCoordEcran.x += xVel;
+    updateBox();
 }
 
 void Figure::updateSprite()
@@ -64,3 +67,13 @@ void Figure::resetSprite()
     dimCoordSprite.y = direction * dimCoordSprite.h;
     dimCoordSprite.x = 0;
 }
+
+void Figure::updateBox()
+{
+	this->box.x = this->dimCoordEcran.x;
+	this->box.y = this->dimCoordEcran.y + TILE_HEIGHT;
+	this->box.w = TILE_WIDTH;
+	this->box.h = this->dimCoordSprite.h - TILE_HEIGHT;
+}
+
+
