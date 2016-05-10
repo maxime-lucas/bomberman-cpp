@@ -5,5 +5,6 @@
 	void start_screen(SDL_Surface *ecran);
 	void init(SDL_Surface**);
 	bool checkCollision( SDL_Rect, SDL_Rect);
+	void play(SDL_Surface*);
 
 #endif // FUNCTIONS_H_INCLUDED

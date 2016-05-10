@@ -1,6 +1,8 @@
 #include "Header.h"
 
-// Fonction pour gérer
+const int MS_PER_UPDATE = 50;
+
+// Fonction pour gérer affichage
 void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip = NULL )
 {
     SDL_Rect offset;
@@ -40,10 +42,10 @@ void start_screen(SDL_Surface *ecran)
     Button *quit = new Button(buttonQuitIMG , dimCoordSprite, 2);
 
     // Positionnement des boutons sur l'écran
-    start->setDimCoordEcranX(15);
-    start->setDimCoordEcranY(420);
-    quit->setDimCoordEcranX(180);
-    quit->setDimCoordEcranY(420);
+    start->setDimCoordEcranX(260);
+    start->setDimCoordEcranY(570);
+    quit->setDimCoordEcranX(440);
+    quit->setDimCoordEcranY(570);
 
     // Animation du logo
     char filename[64];
@@ -52,10 +54,10 @@ void start_screen(SDL_Surface *ecran)
         fps.start();
 
         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
-        sprintf(filename ,"../img/start-screen/intro/%d.png" ,i);
+        sprintf(filename ,"img/start-screen/intro/%d.png" ,i);
         logoIMG = IMG_Load(filename);
         apply_surface(0,0,fondIMG, ecran);
-        apply_surface(0,0,logoIMG, ecran);
+        apply_surface(100,100,logoIMG, ecran);
         SDL_Flip(ecran);
 
         while( fps.get_ticks() < 1000 / FRAMES_PER_SECOND ) {}
@@ -119,7 +121,7 @@ void start_screen(SDL_Surface *ecran)
                 SDL_Flip(ecran);
 
                 // Lancement du jeu
-                //jeu(ecran);
+                play(ecran);
 
                 // Fin de la boucle
                 in.setQuit(1);
@@ -189,4 +191,49 @@ void init(SDL_Surface** s)
 	SDL_Init(SDL_INIT_VIDEO);
 	*s = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	SDL_WM_SetCaption("Bomberman", NULL);
+}
+
+void play(SDL_Surface * ecran)
+{
+    // Objet pour gérer les événements
+	Input in;
+
+	// Instanciation des joueurs
+	Bomber p1, p2;
+	p2.setSprite(IMG_Load("img/sprite-player/player2.png"));
+	Figure players[NB_PLAYERS] = { (Figure) p1, (Figure) p2};
+
+	// Instanciation du jeu
+	Game *g = new Game( ecran, players);
+	g->setupGame();
+
+	// Variables temporelles
+	double previous = SDL_GetTicks();
+	double lag = 0.0;
+
+	while( !in.getQuit() && !in.getKey(SDLK_ESCAPE) )
+	{
+		// Calcul du lag
+		int i = 0;
+		double current = SDL_GetTicks();
+		double elapsed = current - previous;
+		previous = current;
+		lag += elapsed;
+
+		// Mise à jour des événements
+		in.Update();
+
+		// Evolution du jeu, en fonction du lag
+		while (lag >= MS_PER_UPDATE)
+		{
+			g->evolue(in);
+			i++;
+			lag -= MS_PER_UPDATE;
+		}
+
+		// Génération de la map
+		g->render();;
+		g->flip();
+
+	}
 }

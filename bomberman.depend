@@ -1,13 +1,15 @@
 # depslib dependency file v1.0
-1462813690 source:d:\projets\c++\bomberman-cpp\main.cpp
+1462882967 source:d:\projets\c++\bomberman-cpp\main.cpp
 	"Header.h"
 
-1462814391 d:\projets\c++\bomberman-cpp\header.h
+1462881576 d:\projets\c++\bomberman-cpp\header.h
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
+	<SDL_getenv.h>
+	<fmodex/fmod.h>
 	"Classes.h"
 	"Functions.h"
 
@@ -218,9 +220,9 @@
 1462813690 d:\projets\c++\bomberman-cpp\classes.h
 	"Header.h"
 
-1462813690 d:\projets\c++\bomberman-cpp\functions.h
+1462882815 d:\projets\c++\bomberman-cpp\functions.h
 
-1462813690 source:d:\projets\c++\bomberman-cpp\figure.cpp
+1462887694 source:d:\projets\c++\bomberman-cpp\figure.cpp
 	"Header.h"
 
 1462813690 source:d:\projets\c++\bomberman-cpp\shape.cpp
@@ -232,10 +234,10 @@
 1462813690 source:d:\projets\c++\bomberman-cpp\button.cpp
 	"Header.h"
 
-1462814068 source:d:\projets\c++\bomberman-cpp\functions.cpp
+1462887368 source:d:\projets\c++\bomberman-cpp\functions.cpp
 	"Header.h"
 
-1462814426 source:d:\projets\c++\bomberman-cpp\game.cpp
+1462868934 source:d:\projets\c++\bomberman-cpp\game.cpp
 	"Header.h"
 
 1462813690 source:d:\projets\c++\bomberman-cpp\input.cpp
@@ -249,4 +251,7 @@
 
 1462814525 source:d:\projets\c++\bomberman-cpp\tileset.cpp
 	"Header.h"
+
+1325742239 c:\program files (x86)\codeblocks\sdl-1.2.15\include\sdl_getenv.h
+	"SDL_stdinc.h"
 

@@ -7,10 +7,13 @@
 	#include <SDL.h>
 	#include <SDL_image.h>
 	#include <SDL_ttf.h>
+	#include <SDL_getenv.h>
+
+	#include <fmodex/fmod.h>
 
 	// Attributs de l'écran : Largeur, Hauteur, Profondeur de couleur
-	const int SCREEN_WIDTH = 600;
-	const int SCREEN_HEIGHT = 440;
+	const int SCREEN_WIDTH = 850;
+	const int SCREEN_HEIGHT = 650;
 	const int SCREEN_BPP = 32;
 
 	// Constantes pour l'orientation du personnage
@@ -26,14 +29,15 @@
 	const int FRAMES_PER_SECOND = 30;
 
 	// Constantes pour les tuiles
-	const int TILE_WIDTH = 40;
-	const int TILE_HEIGHT = 40;
-	const int TOTAL_TILES = 192;
-	const int NB_TILES_WIDTH = 15;
-	const int NB_TILES_HEIGHT = 11;
+	const int TILE_WIDTH = 50;
+	const int TILE_HEIGHT = 50;
+	const int TOTAL_TILES = 221;
+	const int NB_TILES_WIDTH = 17;
+	const int NB_TILES_HEIGHT = 13;
 	const int TILE_GRASS = 0;
 	const int TILE_WALL = 2;
 	const int TILE_BRICK = 1;
+	const int TILE_WOOD = 3;
 
 	// Constantes pour le jeu
 	const int NB_PLAYERS = 2;
