@@ -1,6 +1,6 @@
 #include "Header.h"
 
-// Fonction pour gérer 
+// Fonction pour gérer affichage
 void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip = NULL )
 {
     SDL_Rect offset;
@@ -20,14 +20,14 @@ void start_screen(SDL_Surface *ecran)
 
     // Préparation du Timer pour les animations
     Timer fps;
-    
+
     // Préparation de l'objet permettant de gérer les événements
     Input in;
 
     // Chargement des images
-    buttonStartIMG = IMG_Load("../img/start-screen/start-button.png");
-    buttonQuitIMG = IMG_Load("../img/start-screen/quit-button.png");
-    fondIMG = IMG_Load("../img/start-screen/start.png");
+    buttonStartIMG = IMG_Load("img/start-screen/start-button.png");
+    buttonQuitIMG = IMG_Load("img/start-screen/quit-button.png");
+    fondIMG = IMG_Load("img/start-screen/start.png");
 
     // Préparation de la structure pour les boutons
     dimCoordSprite.x = 0;
@@ -40,19 +40,19 @@ void start_screen(SDL_Surface *ecran)
     Button *quit = new Button(buttonQuitIMG , dimCoordSprite, 2);
 
     // Positionnement des boutons sur l'écran
-    start->setDimCoordEcranX(15);
-    start->setDimCoordEcranY(420);
-    quit->setDimCoordEcranX(180);
-    quit->setDimCoordEcranY(420);
+    start->setDimCoordEcranX(260);
+    start->setDimCoordEcranY(570);
+    quit->setDimCoordEcranX(440);
+    quit->setDimCoordEcranY(570);
 
     // Animation du logo
     char filename[64];
-    for (int i = 1 ; i <= 76 ; i++)
+    for (int i = 1 ; i <= 42 ; i++)
     {
         fps.start();
 
         SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
-        sprintf(filename ,"../img/start-screen/intro/%d.png" ,i);
+        sprintf(filename ,"img/start-screen/intro/%d.png" ,i);
         logoIMG = IMG_Load(filename);
         apply_surface(0,0,fondIMG, ecran);
         apply_surface(0,0,logoIMG, ecran);
@@ -72,7 +72,7 @@ void start_screen(SDL_Surface *ecran)
     while(!in.getQuit())
     {
         in.Update();
-        
+
         // Survol du bouton PLAY
         if( start->isHovered( in.getMouseX(), in.getMouseY() ) )
         {
@@ -113,15 +113,15 @@ void start_screen(SDL_Surface *ecran)
                 SDL_FreeSurface(buttonQuitIMG);
                 SDL_FreeSurface(fondIMG);
                 SDL_FreeSurface(logoIMG);
-                
+
                 // Reset de l'écran
                 SDL_FillRect(ecran , NULL, SDL_MapRGB(ecran->format , 0,0,0));
                 SDL_Flip(ecran);
-                
+
                 // Lancement du jeu
-                //jeu(ecran);
-                
-                // Fin de la boucle 
+                play(ecran);
+
+                // Fin de la boucle
                 in.setQuit(1);
             }
 
@@ -133,7 +133,7 @@ void start_screen(SDL_Surface *ecran)
                 SDL_FreeSurface(buttonQuitIMG);
                 SDL_FreeSurface(fondIMG);
                 SDL_FreeSurface(logoIMG);
-                
+
                 // Fin de la boucle
                 in.setQuit(1);
             }
@@ -183,7 +183,7 @@ bool checkCollision( SDL_Rect a, SDL_Rect b )
 
     return true;
 }
- 
+
 void init(SDL_Surface** s)
 {
 	SDL_Init(SDL_INIT_VIDEO);
@@ -191,6 +191,7 @@ void init(SDL_Surface** s)
 	SDL_WM_SetCaption("Bomberman", NULL);
 }
 
+<<<<<<< HEAD:src/Functions.cpp
 void play(SDL_Surface* ecran)
 {
 	// Objet pour gï¿½rer les ï¿½vï¿½nements
@@ -210,16 +211,45 @@ void play(SDL_Surface* ecran)
 	
 	while( !in.getQuit() && !in.getKey(SDLK_ESCAPE) )
 	{	
+=======
+void play(SDL_Surface * ecran)
+{
+    // Objet pour gérer les événements
+	Input in;
+
+	// Instanciation des joueurs
+	Bomber p1, p2;
+	p2.setSprite(IMG_Load("img/sprites/player2.png"));
+	Figure players[NB_PLAYERS] = { (Figure) p1, (Figure) p2};
+
+	// Instanciation du jeu
+	Game *g = new Game( ecran, players);
+	g->setupGame();
+
+	// Variables temporelles
+	double previous = SDL_GetTicks();
+	double lag = 0.0;
+
+	while( !in.getQuit() && !in.getKey(SDLK_ESCAPE) )
+	{
+>>>>>>> Benjamin:Functions.cpp
 		// Calcul du lag
 		int i = 0;
 		double current = SDL_GetTicks();
 		double elapsed = current - previous;
 		previous = current;
 		lag += elapsed;
+<<<<<<< HEAD:src/Functions.cpp
 		
 		// Mise ï¿½ jour des ï¿½vï¿½nements
 		in.Update();
 		
+=======
+
+		// Mise à jour des événements
+		in.Update();
+
+>>>>>>> Benjamin:Functions.cpp
 		// Evolution du jeu, en fonction du lag
 		while (lag >= MS_PER_UPDATE)
 		{
@@ -227,6 +257,7 @@ void play(SDL_Surface* ecran)
 			i++;
 			lag -= MS_PER_UPDATE;
 		}
+<<<<<<< HEAD:src/Functions.cpp
 		
 		// Gï¿½nï¿½ration de la map
 		g->render();;
@@ -258,4 +289,17 @@ void start_screen_2(SDL_Surface* ecran)
 
         fps.stop();
     }	
+=======
+
+		// Génération de la map
+		g->render();
+		g->flip();
+	}
+	start_screen(ecran);
+}
+
+void menu(SDL_Surface * ecran)
+{
+
+>>>>>>> Benjamin:Functions.cpp
 }

@@ -2,7 +2,7 @@
 
 Bomber::Bomber() : Figure()
 {
-	this->sprite = IMG_Load("../img/sprite-player/player1.png"); /*chargement de l'image du personnage*/
+	this->sprite = IMG_Load("img/sprites/player1.png"); /*chargement de l'image du personnage*/
 	this->nbSprites = 6; /*nb d'images pour l'animation du perso*/
 
 	this->dimCoordSprite.w = 40; /*largeur d'une image de l'animation*/

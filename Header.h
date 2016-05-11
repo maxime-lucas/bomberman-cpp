@@ -4,12 +4,23 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 
+<<<<<<< HEAD:src/Header.h
 	#include <SDL/SDL.h>
 	#include <SDL/SDL_image.h>
 	#include <SDL/SDL_ttf.h>
 	#include <SDL/SDL_getenv.h>
 
 	// Attributs de l'ï¿½cran : Largeur, Hauteur, Profondeur de couleur
+=======
+	#include <SDL.h>
+	#include <SDL_image.h>
+	#include <SDL_ttf.h>
+	#include <SDL_getenv.h>
+
+	#include <fmodex/fmod.h>
+
+	// Attributs de l'écran : Largeur, Hauteur, Profondeur de couleur
+>>>>>>> Benjamin:Header.h
 	const int SCREEN_WIDTH = 850;
 	const int SCREEN_HEIGHT = 650;
 	const int SCREEN_BPP = 32;
@@ -18,13 +29,14 @@
 	const int NORTH = 0;
 	const int SOUTH = 1;
 	const int WEST = 2;
-	const int EAST = 3; 
+	const int EAST = 3;
 
 	// Vitesse de dï¿½placement, par dï¿½faut, du personnage ( en px / sec )
 	const int DEFAULT_SPEED = 300;
 
 	// Nombre d'images devant s'afficher par seconde
 	const int FRAMES_PER_SECOND = 30;
+	const int MS_PER_UPDATE = 50;
 
 	// Constantes pour les tuiles
 	const int TILE_WIDTH = 50;
@@ -36,12 +48,19 @@
 	const int TILE_WALL = 2;
 	const int TILE_BRICK = 1;
 	const int TILE_WOOD = 3;
+<<<<<<< HEAD:src/Header.h
 	
 	// Constantes pour le jeu
 	const int NB_PLAYERS = 2;
 	
 	const int MS_PER_UPDATE = 50;
 	
+=======
+
+	// Constantes pour le jeu
+	const int NB_PLAYERS = 2;
+
+>>>>>>> Benjamin:Header.h
 	#include "Classes.h"
 	#include "Functions.h"
 #endif // HEADER_H_INCLUDED

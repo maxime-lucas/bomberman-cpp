@@ -7,7 +7,9 @@ Figure::Figure() : Shape()
     this->xVel = 0;
     this->yVel = 0;
 
-    this->speed = DEFAULT_SPEED; 
+    this->speed = DEFAULT_SPEED;
+
+    this->nbBomb = 5;
 }
 
 Figure::Figure(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb)
@@ -19,7 +21,10 @@ Figure::~Figure()
 
 void Figure::show(SDL_Surface *dest)
 {
+    //SDL_Surface *s;
+    //s = SDL_CreateRGBSurface(0,box.w , box.h , SCREEN_BPP, 0,255,255,0);
     apply_surface(dimCoordEcran.x , dimCoordEcran.y , sprite, dest ,&dimCoordSprite);
+    //apply_surface(box.x , box.y , s, dest, NULL );
 }
 
 void Figure::MoveUp()
@@ -71,9 +76,25 @@ void Figure::resetSprite()
 void Figure::updateBox()
 {
 	this->box.x = this->dimCoordEcran.x;
+<<<<<<< HEAD:src/Figure.cpp
 	this->box.y = this->dimCoordEcran.y + TILE_HEIGHT -10;
 	this->box.w = this->dimCoordSprite.w;
 	this->box.h = this->dimCoordSprite.h - TILE_HEIGHT + 10;
+=======
+	this->box.y = this->dimCoordEcran.y + TILE_HEIGHT - 10;
+	this->box.w = this->dimCoordSprite.w;
+	this->box.h = this->dimCoordSprite.h - TILE_HEIGHT + 10;
+}
+
+void Figure::dropBomb()
+{
+    this->nbBomb--;
+}
+
+void Figure::pickBomb()
+{
+    this->nbBomb++;
+>>>>>>> Benjamin:Figure.cpp
 }
 
 
