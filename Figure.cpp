@@ -8,6 +8,8 @@ Figure::Figure() : Shape()
     this->yVel = 0;
 
     this->speed = DEFAULT_SPEED;
+
+    this->nbBomb = 5;
 }
 
 Figure::Figure(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb)
@@ -77,6 +79,16 @@ void Figure::updateBox()
 	this->box.y = this->dimCoordEcran.y + TILE_HEIGHT - 10;
 	this->box.w = this->dimCoordSprite.w;
 	this->box.h = this->dimCoordSprite.h - TILE_HEIGHT + 10;
+}
+
+void Figure::dropBomb()
+{
+    this->nbBomb--;
+}
+
+void Figure::pickBomb()
+{
+    this->nbBomb++;
 }
 
 

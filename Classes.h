@@ -48,7 +48,8 @@ class Figure : public Shape
 	    void updateSprite();
 	    SDL_Rect box;
 	    void updateBox();
-	
+	    int nbBomb;
+
 	public:
 		Figure();
 		Figure(SDL_Surface* , SDL_Rect , int);
@@ -62,6 +63,10 @@ class Figure : public Shape
 		void MoveRight();
 		void resetSprite();
 
+		// Gestion des bombes
+		void dropBomb();
+		void pickBomb();
+
 		// Accesseurs
 		void setXvel(int x){ this->xVel = x; }
 		int getXvel() { return this->xVel; }
@@ -70,6 +75,7 @@ class Figure : public Shape
 		int getSpeed() { return this->speed; }
 		SDL_Rect getBox(){ return this->box; }
 		void setBox(SDL_Rect box){ this->box = box; }
+		int getNbBomb() { return this->nbBomb; }
 };
 
 class Bomber : public Figure
@@ -139,14 +145,14 @@ class Input
 		int mouseXRel, mouseYRel;
 		char mouseButtons[8];
 		char quit;
-	
+
 	public:
 		Input();
 		~Input();
 		void Update();
 		char& getKey(int i) { return key[i]; }
-		int getMouseX(){ return mouseX; }	
-		int getMouseY(){ return mouseY; }	
+		int getMouseX(){ return mouseX; }
+		int getMouseY(){ return mouseY; }
 		int getMouseXRel(){ return mouseXRel; }
 		int getMouseYRel(){ return mouseYRel; }
 		int getMouseButton(int i){ return mouseButtons[i]; }
@@ -159,7 +165,7 @@ class TileSet
 	protected :
 		SDL_Rect clips[  NB_TILES_WIDTH *  NB_TILES_HEIGHT ];
 		SDL_Surface *tileSet;
-		
+
 	public :
 		TileSet();
 		SDL_Rect getClip(int i) { return this->clips[i]; }
@@ -171,7 +177,7 @@ class Tile
 	protected :
 		SDL_Rect box;
 		int type;
-		
+
 	public:
 		Tile( int, int, int);
 		void show(TileSet*, SDL_Surface*);
@@ -190,9 +196,28 @@ class TileMap
 		~TileMap();
 		void add(void *);
 		void draw(TileSet*, SDL_Surface* );
-		
+
 		void* get(int i) { return tab[i]; }
 		int getNb(){ return nb; }
+};
+
+class Bomb: public Shape
+{
+public:
+    Bomb();
+    ~Bomb();
+    void nextSprite();
+    void nextStep();
+    void show(SDL_Surface*);
+    void resetSprite();
+    int getStep() {return step;};
+    int getDateOfExplosion() {return dateOfExplosion;};
+    int getDelay() {return delay;};
+
+protected:
+    int step;
+    int delay;
+    int dateOfExplosion;
 };
 
 class Game
@@ -202,8 +227,9 @@ class Game
 		TileMap *mapWalls;
 		TileSet *tileSet;
 		SDL_Surface* ecran;
+		Bomb *b1 = NULL;
 		Figure players[NB_PLAYERS];
-		
+
 	public :
 		Game(SDL_Surface*);
 		Game(SDL_Surface*, Figure[]);
@@ -211,9 +237,10 @@ class Game
 		void evolue(Input&);
 		void render();
 		void flip();
-		
+
 		bool touchesTile( SDL_Rect , TileMap* , int );
 };
+
 
 
 #endif // CLASSES_H_INCLUDED

@@ -27,6 +27,7 @@
 
 	// Nombre d'images devant s'afficher par seconde
 	const int FRAMES_PER_SECOND = 30;
+	const int MS_PER_UPDATE = 50;
 
 	// Constantes pour les tuiles
 	const int TILE_WIDTH = 50;

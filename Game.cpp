@@ -6,6 +6,9 @@ Game::Game(SDL_Surface *ecran)
 
 	mapBackground = new TileMap();
 	mapWalls = new TileMap();
+
+	//b1->setDimCoordEcranX(200);
+	//b1->setDimCoordEcranY(50);
 	tileSet = new TileSet();
 }
 
@@ -16,6 +19,9 @@ Game::Game(SDL_Surface *ecran, Figure players[])
 		this->players[i] = players[i];
 	}
 	this->ecran = ecran;
+
+	b1 = new Bomb();
+	b1->nextStep();
 
 	mapBackground = new TileMap();
 	mapWalls = new TileMap();
@@ -133,6 +139,19 @@ void Game::evolue(Input& in)
             	players[i].resetSprite();
 		}
 	}
+
+	b1->nextSprite();
+	if ((b1->getStep() == 1) && (SDL_GetTicks() >= b1->getDateOfExplosion() - b1->getDelay() / 2))
+    {
+        b1->nextStep();
+        b1->resetSprite();
+    }
+
+    if ((b1->getStep() == 2) && (SDL_GetTicks() >= b1->getDateOfExplosion()) )
+    {
+        b1->nextStep();
+        b1->resetSprite();
+    }
 }
 
 void Game::render()
@@ -141,6 +160,9 @@ void Game::render()
 
 	mapBackground->draw(tileSet, ecran);
 	mapWalls->draw(tileSet, ecran);
+
+	if(b1->getStep() != 3)
+        b1->show(ecran);
 
 	for(int i = 0; i < NB_PLAYERS ; i++)
 		players[i].show(ecran);

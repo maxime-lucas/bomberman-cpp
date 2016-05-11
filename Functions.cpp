@@ -1,7 +1,5 @@
 #include "Header.h"
 
-const int MS_PER_UPDATE = 50;
-
 // Fonction pour gérer affichage
 void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip = NULL )
 {
@@ -49,7 +47,7 @@ void start_screen(SDL_Surface *ecran)
 
     // Animation du logo
     char filename[64];
-    for (int i = 1 ; i <= 76 ; i++)
+    for (int i = 1 ; i <= 42 ; i++)
     {
         fps.start();
 
@@ -57,7 +55,7 @@ void start_screen(SDL_Surface *ecran)
         sprintf(filename ,"img/start-screen/intro/%d.png" ,i);
         logoIMG = IMG_Load(filename);
         apply_surface(0,0,fondIMG, ecran);
-        apply_surface(100,100,logoIMG, ecran);
+        apply_surface(0,0,logoIMG, ecran);
         SDL_Flip(ecran);
 
         while( fps.get_ticks() < 1000 / FRAMES_PER_SECOND ) {}
@@ -200,7 +198,7 @@ void play(SDL_Surface * ecran)
 
 	// Instanciation des joueurs
 	Bomber p1, p2;
-	p2.setSprite(IMG_Load("img/sprite-player/player2.png"));
+	p2.setSprite(IMG_Load("img/sprites/player2.png"));
 	Figure players[NB_PLAYERS] = { (Figure) p1, (Figure) p2};
 
 	// Instanciation du jeu
@@ -232,8 +230,13 @@ void play(SDL_Surface * ecran)
 		}
 
 		// Génération de la map
-		g->render();;
+		g->render();
 		g->flip();
-
 	}
+	start_screen(ecran);
+}
+
+void menu(SDL_Surface * ecran)
+{
+
 }
