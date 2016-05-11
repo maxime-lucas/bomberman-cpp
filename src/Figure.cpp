@@ -71,9 +71,9 @@ void Figure::resetSprite()
 void Figure::updateBox()
 {
 	this->box.x = this->dimCoordEcran.x;
-	this->box.y = this->dimCoordEcran.y + TILE_HEIGHT;
-	this->box.w = TILE_WIDTH;
-	this->box.h = this->dimCoordSprite.h - TILE_HEIGHT;
+	this->box.y = this->dimCoordEcran.y + TILE_HEIGHT -10;
+	this->box.w = this->dimCoordSprite.w;
+	this->box.h = this->dimCoordSprite.h - TILE_HEIGHT + 10;
 }
 
 

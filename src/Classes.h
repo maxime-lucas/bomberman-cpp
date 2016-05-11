@@ -25,7 +25,6 @@ class Shape
 		int getDimCoordEcranY();
 		int getDimCoordEcranW();
 		int getDimCoordEcranH();
-
 		void setDimCoordSpriteX(int);
 		void setDimCoordSpriteY(int);
 		void setDimCoordSpriteW(int);
@@ -34,7 +33,6 @@ class Shape
 		int getDimCoordSpriteY();
 		int getDimCoordSpriteW();
 		int getDimCoordSpriteH();
-
 		void setSprite(SDL_Surface*);
 };
 

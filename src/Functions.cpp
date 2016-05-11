@@ -190,3 +190,72 @@ void init(SDL_Surface** s)
 	*s = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	SDL_WM_SetCaption("Bomberman", NULL);
 }
+
+void play(SDL_Surface* ecran)
+{
+	// Objet pour gï¿½rer les ï¿½vï¿½nements
+	Input in;
+	
+	// Instanciation des joueurs
+	Bomber p1, p2;
+	Figure players[NB_PLAYERS] = { (Figure) p1, (Figure) p2};
+	
+	// Instanciation du jeu
+	Game *g = new Game( ecran, players);
+	g->setupGame();
+	
+	// Variables temporelles
+	double previous = SDL_GetTicks();
+	double lag = 0.0;
+	
+	while( !in.getQuit() && !in.getKey(SDLK_ESCAPE) )
+	{	
+		// Calcul du lag
+		int i = 0;
+		double current = SDL_GetTicks();
+		double elapsed = current - previous;
+		previous = current;
+		lag += elapsed;
+		
+		// Mise ï¿½ jour des ï¿½vï¿½nements
+		in.Update();
+		
+		// Evolution du jeu, en fonction du lag
+		while (lag >= MS_PER_UPDATE)
+		{
+			g->evolue(in);
+			i++;
+			lag -= MS_PER_UPDATE;
+		}
+		
+		// Gï¿½nï¿½ration de la map
+		g->render();;
+		g->flip();
+	}
+}
+
+void start_screen_2(SDL_Surface* ecran)
+{
+	// Vars
+    SDL_Surface *fondIMG;
+
+    // Préparation du Timer pour les animations
+    Timer fps;
+
+    // Animation du logo
+    char filename[64];
+    for (int i = 1 ; i <= 90 ; i++)
+    {
+        fps.start();
+
+        SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
+        sprintf(filename ,"../img/start-screen-2/%d.png" ,i);
+        fondIMG = IMG_Load(filename);
+        apply_surface(0,0,fondIMG, ecran);
+        SDL_Flip(ecran);
+
+        while( fps.get_ticks() < 1000 / FRAMES_PER_SECOND ) {}
+
+        fps.stop();
+    }	
+}

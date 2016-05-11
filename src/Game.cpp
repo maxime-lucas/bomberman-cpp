@@ -47,14 +47,14 @@ void Game::setupGame()
 	{
 		case 1 :
 			players[0].setDimCoordEcranX(TILE_WIDTH);
-			players[0].setDimCoordEcranY(0);
+			players[0].setDimCoordEcranY(20);
 			break;
 		case 2 :
 			players[0].setDimCoordEcranX(TILE_WIDTH);
-			players[0].setDimCoordEcranY(0);
+			players[0].setDimCoordEcranY(20);
 			
 			players[1].setDimCoordEcranX( ( NB_TILES_WIDTH - 2) * TILE_WIDTH );
-			players[1].setDimCoordEcranY(0);
+			players[1].setDimCoordEcranY(20);
 			
 			break;
 		default:
