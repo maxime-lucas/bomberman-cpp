@@ -11,7 +11,7 @@ Bomb::Bomb() : Shape()
 	this->dimCoordSprite.x = 0; /*coordonnée x d'affichage à l'écran de départ*/
 	this->dimCoordSprite.y = 0; /*coordonnée y de départ*/
 
-	this->step = 0;
+	this->step = 1;
 	this->delay = 8000;
 	this->dateOfExplosion = SDL_GetTicks() + delay;
 }
@@ -33,6 +33,7 @@ void Bomb::nextStep()
 void Bomb::nextSprite()
 {
     dimCoordSprite.y = 0;
+    
     switch(step)
     {
         case 1:

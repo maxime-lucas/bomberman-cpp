@@ -78,16 +78,6 @@ class Player : public Shape
 		int getNbBomb() { return this->nbBomb; }
 };
 
-class Bomber : public Player
-{
-	protected:
-
-	public:
-	    Bomber();
-	    ~Bomber();
-	    void show (SDL_Surface*);
-	};
-
 class Button : public Shape
 {
 	protected :
@@ -150,6 +140,7 @@ class Input
 		Input();
 		~Input();
 		void Update();
+		void resetKey(int i) { this->key[i] = 0; };
 		char& getKey(int i) { return key[i]; }
 		int getMouseX(){ return mouseX; }
 		int getMouseY(){ return mouseY; }
@@ -185,39 +176,101 @@ class Tile
 		SDL_Rect getBox();
 };
 
-class TileMap
+class Map
 {
 	protected :
 		void **tab;
 		int nb;
 	public :
-		TileMap();
-		TileMap& operator=(const TileMap&);
-		~TileMap();
+		Map();
+		Map& operator=(const Map&);
+		~Map();
+		
 		void add(void *);
-		void draw(TileSet*, SDL_Surface* );
-
+		void remove(void *);
 		void* get(int i) { return tab[i]; }
 		int getNb(){ return nb; }
 };
 
+class TileMap : public Map
+{
+	protected :
+	public :
+		TileMap();
+		~TileMap();
+		
+		void draw(TileSet*, SDL_Surface*);
+};
+
+class BombMap : public Map
+{
+	protected :
+	public :
+		BombMap();
+		~BombMap();
+		
+		void draw(SDL_Surface*);
+};
+
+class ExplosionMap : public Map
+{
+	protected :
+	public :
+		ExplosionMap();
+		~ExplosionMap();
+		
+		void draw(SDL_Surface*);
+};
+
+class PlayerMap : public Map
+{
+	protected :
+	public :
+		PlayerMap();
+		~PlayerMap();
+		
+		void draw(SDL_Surface*);
+};
+
 class Bomb: public Shape
 {
-public:
-    Bomb();
-    ~Bomb();
-    void nextSprite();
-    void nextStep();
-    void show(SDL_Surface*);
-    void resetSprite();
-    int getStep() {return step;};
-    int getDateOfExplosion() {return dateOfExplosion;};
-    int getDelay() {return delay;};
+	public:
+	    Bomb();
+	    ~Bomb();
+	    void nextSprite();
+	    void nextStep();
+	    void show(SDL_Surface*);
+	    void resetSprite();
+	    int getStep() {return step;};
+	    int getDateOfExplosion() {return dateOfExplosion;};
+	    int getDelay() {return delay;};
 
-protected:
-    int step;
-    int delay;
-    int dateOfExplosion;
+	protected:
+	    int step;
+	    int delay;
+	    int dateOfExplosion;
+};
+
+class Explosion: public Shape
+{
+	protected :
+		int step;
+		int duration;
+		int strength;
+		int dateOfDisparition;
+	
+	public :
+		Explosion();
+		~Explosion();
+		void nextSprite();
+		void nextStep();
+		void show(SDL_Surface*);
+		void resetSprite();
+		
+		int getStrength() {return strength; };
+		int getStep() {return step;};
+		int getDateOfDisparition() {return dateOfDisparition;};
+		int getDuration() {return duration;};
 };
 
 class Game
@@ -225,10 +278,12 @@ class Game
 	protected :
 		TileMap *mapBackground;
 		TileMap *mapWalls;
+		BombMap *mapBombs;
+		PlayerMap *mapPlayers;
+		ExplosionMap *mapExplosions;
+		
 		TileSet *tileSet;
 		SDL_Surface* ecran;
-		Bomb *b1 = NULL;
-		Player players[NB_PLAYERS];
 
 	public :
 		Game(SDL_Surface*);

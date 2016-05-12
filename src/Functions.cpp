@@ -207,7 +207,7 @@ void play(SDL_Surface * ecran)
 	Input in;
 
 	// Instanciation des joueurs
-	Bomber p1, p2, p3;
+	Player p1, p2, p3;
 	p2.setSprite(IMG_Load("../img/sprites/player2.png"));
 	Player players[NB_PLAYERS] = { (Player) p1, (Player) p2, (Player) p3};
 

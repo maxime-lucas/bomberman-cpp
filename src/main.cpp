@@ -1,30 +1,23 @@
 #include "Header.h"
 
-<<<<<<< HEAD
-int main(int argc, char* argv[])
-{
-	// Initialisation
-	SDL_Surface *ecran ;
-	SDL_putenv("SLD_VIDEO_CENTERED=center");
-	init(&ecran); 
-	
-	start_screen_2(ecran);
-	play(ecran);
-	
-=======
+
 //const int MS_PER_UPDATE = 50;
 
 int main(int argc, char *argv[])
 {
-	// Initialisation
+	// Initialisation :
+	//	- Pour centrer la fenêtre dans l'écran
+	// 	- Appel de la fonction init()
+	
 	SDL_Surface *ecran ;
-	SDL_putenv("SDL_VIDEO_CENTERED=center");
+	char config[] = "SDL_VIDEO_CENTERED=center";
+	SDL_putenv(config);
 	init(&ecran);
 
+	// Intro et Menu principal du jeu :
 	start_screen(ecran);
 	menu(ecran);
 
->>>>>>> Benjamin
 	// Fin du jeu
 	SDL_Quit();
 	return EXIT_SUCCESS;
