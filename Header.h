@@ -41,7 +41,14 @@
 	const int TILE_WOOD = 3;
 
 	// Constantes pour le jeu
-	const int NB_PLAYERS = 2;
+	const int NB_PLAYERS = 4;
+	const int SPAWN_PLAYERS[4][2] =
+	{
+	    {1,1},
+	    {15,1},
+	    {1,11},
+	    {15,11}
+	};
 
 	#include "Classes.h"
 	#include "Functions.h"

@@ -21,47 +21,7 @@ int main(int argc, char *argv[])
     FMOD_ChannelGroup_SetVolume(channel, 0.8);
     FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, sound, 0, NULL);
 
-//	// Objet pour gérer les événements
-//	Input in;
-//
-//	// Instanciation des joueurs
-//	Bomber p1, p2;
-//	p2.setSprite(IMG_Load("img/sprite-player/player2.png"));
-//	Figure players[NB_PLAYERS] = { (Figure) p1, (Figure) p2};
-//
-//	// Instanciation du jeu
-//	Game *g = new Game( ecran, players);
-//	g->setupGame();
-//
-//	// Variables temporelles
-//	double previous = SDL_GetTicks();
-//	double lag = 0.0;
-//
-//	while( !in.getQuit() && !in.getKey(SDLK_ESCAPE) )
-//	{
-//		// Calcul du lag
-//		int i = 0;
-//		double current = SDL_GetTicks();
-//		double elapsed = current - previous;
-//		previous = current;
-//		lag += elapsed;
-//
-//		// Mise à jour des événements
-//		in.Update();
-//
-//		// Evolution du jeu, en fonction du lag
-//		while (lag >= MS_PER_UPDATE)
-//		{
-//			g->evolue(in);
-//			i++;
-//			lag -= MS_PER_UPDATE;
-//		}
-//
-//		// Génération de la map
-//		g->render();;
-//		g->flip();
-//
-//	}
+
     start_screen(ecran);
 
     //fin du son

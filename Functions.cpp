@@ -197,9 +197,11 @@ void play(SDL_Surface * ecran)
 	Input in;
 
 	// Instanciation des joueurs
-	Bomber p1, p2;
+	Player p1, p2, p3, p4;
 	p2.setSprite(IMG_Load("img/sprites/player2.png"));
-	Figure players[NB_PLAYERS] = { (Figure) p1, (Figure) p2};
+	p3.setSprite(IMG_Load("img/sprites/player3.png"));
+	p4.setSprite(IMG_Load("img/sprites/player4.png"));
+	Player players[NB_PLAYERS] = { (Player) p1, (Player) p2, (Player) p3, (Player) p4};
 
 	// Instanciation du jeu
 	Game *g = new Game( ecran, players);

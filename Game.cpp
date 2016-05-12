@@ -6,26 +6,29 @@ Game::Game(SDL_Surface *ecran)
 
 	mapBackground = new TileMap();
 	mapWalls = new TileMap();
-
-	//b1->setDimCoordEcranX(200);
-	//b1->setDimCoordEcranY(50);
+	mapPlayers = new PlayerMap();
+	mapBombs = new BombMap();
+	mapExplosions = new ExplosionMap();
 	tileSet = new TileSet();
 }
 
-Game::Game(SDL_Surface *ecran, Figure players[])
+Game::Game(SDL_Surface *ecran, Player players[])
 {
-	for(int i = 0; i < NB_PLAYERS; i++)
-	{
-		this->players[i] = players[i];
-	}
 	this->ecran = ecran;
-
-	b1 = new Bomb();
-	b1->nextStep();
 
 	mapBackground = new TileMap();
 	mapWalls = new TileMap();
+	mapPlayers = new PlayerMap();
+	mapExplosions = new ExplosionMap();
+	mapBombs = new BombMap();
 	tileSet = new TileSet();
+
+	for(int i = 0; i < NB_PLAYERS; i++)
+	{
+		Player *p = &players[i];
+		mapPlayers->add((void*) p);
+	}
+
 }
 
 void Game::setupGame()
@@ -48,23 +51,18 @@ void Game::setupGame()
 		}
 	}
 
-	// Ajout des personnages
-	switch(NB_PLAYERS)
+	// Placement des personnages
+	for(int i = 0; i < NB_PLAYERS; i++)
 	{
-		case 1 :
-			players[0].setDimCoordEcranX(TILE_WIDTH);
-			players[0].setDimCoordEcranY(20);
-			break;
-		case 2 :
-			players[0].setDimCoordEcranX(TILE_WIDTH);
-			players[0].setDimCoordEcranY(20);
+		// Récupération du joueur i
+		Player *p = (Player*) mapPlayers->get(i);
 
-			players[1].setDimCoordEcranX( ( NB_TILES_WIDTH - 2) * TILE_WIDTH );
-			players[1].setDimCoordEcranY(20);
+		p->setDimCoordEcranX(TILE_WIDTH* SPAWN_PLAYERS[i][0]);
 
-			break;
-		default:
-			break;
+		if(i <= 1)
+			p->setDimCoordEcranY(20);
+		else
+			p->setDimCoordEcranY( TILE_HEIGHT*SPAWN_PLAYERS[i][1] - ( p->getDimCoordSpriteH() - TILE_HEIGHT ) - 3 );
 	}
 
 	// Ajout des murs centraux
@@ -84,88 +82,176 @@ void Game::setupGame()
 
 void Game::evolue(Input& in)
 {
-	SDLKey tabkey[NB_PLAYERS][4] = { {SDLK_w,SDLK_s,SDLK_a,SDLK_d} , {SDLK_UP,SDLK_DOWN,SDLK_LEFT,SDLK_RIGHT} };
+	// Tableau des contrôles des joueurs
+	SDLKey tabkey[4][5] =
+		{
+			{SDLK_y, SDLK_h, SDLK_g, SDLK_j, SDLK_t},
+			{SDLK_UP,SDLK_DOWN,SDLK_LEFT,SDLK_RIGHT, SDLK_RSHIFT},
+			{SDLK_w,SDLK_s,SDLK_a,SDLK_d, SDLK_q},
+			{SDLK_KP8, SDLK_KP5, SDLK_KP4, SDLK_KP6, SDLK_KP7}
+		};
 
-	int i;
-
-	for(i=0;i<NB_PLAYERS;i++)
+	// Ecoute du clavier et Actions en conséquence
+	for(int i=0; i<NB_PLAYERS; i++ )
 	{
+		// Récupération du joueur i
+		Player *p = (Player*) mapPlayers->get(i);
+
+		// Mouvement vers le haut :
 		if( in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
 		{
-			players[i].setYvel((players[i].getSpeed() / (FRAMES_PER_SECOND)));
-            	players[i].MoveUp();
+			p->setYvel((p->getSpeed() / (FRAMES_PER_SECOND)));
+            	p->MoveUp();
 
-    			if(touchesTile(players[i].getBox(), mapWalls, mapWalls->getNb() ) )
+    			if(touchesTile(p->getBox(), mapWalls, mapWalls->getNb() ) )
     			{
-    				players[i].setDimCoordEcranY(players[i].getDimCoordEcranY() + players[i].getYvel() );
+    				p->setDimCoordEcranY(p->getDimCoordEcranY() + p->getYvel() );
     			}
 		}
 
+		// Mouvement vers le bas :
 		if( !in.getKey(tabkey[i][0]) && in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
 		{
-			players[i].setYvel((players[i].getSpeed() / (FRAMES_PER_SECOND)));
-            	players[i].MoveDown();
+			p->setYvel((p->getSpeed() / (FRAMES_PER_SECOND)));
+            	p->MoveDown();
 
-            	if(touchesTile(players[i].getBox(), mapWalls, mapWalls->getNb() ) )
+            	if(touchesTile(p->getBox(), mapWalls, mapWalls->getNb() ) )
     			{
-    				players[i].setDimCoordEcranY(players[i].getDimCoordEcranY() - players[i].getYvel() );
+    				p->setDimCoordEcranY(p->getDimCoordEcranY() - p->getYvel() );
     			}
 		}
 
+		// Mouvement vers la gauche :
 		if( !in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
 		{
-			players[i].setXvel((players[i].getSpeed() / (FRAMES_PER_SECOND)));
-            	players[i].MoveLeft();
+			p->setXvel((p->getSpeed() / (FRAMES_PER_SECOND)));
+            	p->MoveLeft();
 
-            	if(touchesTile(players[i].getBox(), mapWalls, mapWalls->getNb() ) )
+            	if(touchesTile(p->getBox(), mapWalls, mapWalls->getNb() ) )
     			{
-    				players[i].setDimCoordEcranX(players[i].getDimCoordEcranX() + players[i].getXvel() );
+    				p->setDimCoordEcranX(p->getDimCoordEcranX() + p->getXvel() );
     			}
 		}
 
+		// Mouvement vers la droite :
 		if( !in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && in.getKey(tabkey[i][3]))
 		{
-			players[i].setXvel((players[i].getSpeed() / (FRAMES_PER_SECOND)));
-            	players[i].MoveRight();
+			p->setXvel((p->getSpeed() / (FRAMES_PER_SECOND)));
+            	p->MoveRight();
 
-            	if(touchesTile(players[i].getBox(), mapWalls, mapWalls->getNb() ) )
+            	if(touchesTile(p->getBox(), mapWalls, mapWalls->getNb() ) )
     			{
-    				players[i].setDimCoordEcranX(players[i].getDimCoordEcranX() - players[i].getXvel() );
+    				p->setDimCoordEcranX(p->getDimCoordEcranX() - p->getXvel() );
     			}
 		}
 
+		// Remise à 0 du sprite, dès qu'on relâche toutes les touches de déplacement
 		if( !in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
 		{
-            	players[i].resetSprite();
+            	p->resetSprite();
+		}
+
+		// Pose d'une bombe
+		if( in.getKey(tabkey[i][4] ) )
+		{
+			// Remise à 0 de la touche, pour éviter la pose de bombe en restant appuyé :
+			in.resetKey(tabkey[i][4]);
+
+			// On vérifie que le joueur a au moins une bombe à poser
+			if( p->getNbBomb() > 0 )
+			{
+				// Instanciation d'une nouvelle bombe
+				Bomb *b = new Bomb();
+
+				// Placement de la bombe aux coordonnées du joueur qui l'a posé
+				int x = p->getDimCoordEcranX();
+				int y = p->getDimCoordEcranY()+p->getDimCoordSpriteH();
+				x = x - x%TILE_WIDTH;
+				y = y - y%TILE_HEIGHT;
+
+
+				b->setDimCoordEcranX(x);
+				b->setDimCoordEcranY(y);
+				// Décrémentation du nombre de bombes du joueur qui l'a posé
+				p->dropBomb();
+
+				// Ajout de la bombe au Map correspondant
+				mapBombs->add( (void*) b );
+			}
 		}
 	}
 
-	b1->nextSprite();
-	if ((b1->getStep() == 1) && (SDL_GetTicks() >= b1->getDateOfExplosion() - b1->getDelay() / 2))
-    {
-        b1->nextStep();
-        b1->resetSprite();
-    }
+	// Mise à jour des bombes
+	for(int i = 0; i < mapBombs->getNb() ; i++ )
+	{
+		Bomb *b = (Bomb*) mapBombs->get(i);
 
-    if ((b1->getStep() == 2) && (SDL_GetTicks() >= b1->getDateOfExplosion()) )
-    {
-        b1->nextStep();
-        b1->resetSprite();
-    }
+		b->nextSprite();
+		if( ( b->getStep() == 1 ) && ( SDL_GetTicks() >= b->getDateOfExplosion() - b->getDelay() / 2 ) )
+		{
+			b->nextStep();
+			b->resetSprite();
+		}
+
+		if( ( b->getStep() == 2 ) && ( SDL_GetTicks() >= b->getDateOfExplosion()) )
+		{
+			b->nextStep();
+			b->resetSprite();
+		}
+
+		if( ( b->getStep() == 3 ) )
+		{
+			// Création d'une explosion à la place
+			Explosion *e = new Explosion();
+
+			// Placement de l'explosion
+			int x = b->getDimCoordEcranX();
+			int y = b->getDimCoordEcranY();
+
+			e->setDimCoordEcranX(x);
+			e->setDimCoordEcranY(y);
+
+			// Ajout de l'explosion au Map correspondant
+			mapExplosions->add( (void*) e);
+
+			// Suppression de la bombe
+			mapBombs->remove( (void*) b );
+
+		}
+	}
+
+	// Mise à jour des explosions
+	for(int i = 0; i < mapExplosions->getNb() ; i++ )
+	{
+		Explosion *e = (Explosion *) mapExplosions->get(i);
+
+		if( SDL_GetTicks() >= e->getDateOfEnd() )
+		{
+			mapExplosions->remove( (void*) e );
+		}
+	}
+
 }
 
 void Game::render()
 {
+	// Réinitialisation de l'écran
 	SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
 
+	// Affichage du calque 1 : Background
 	mapBackground->draw(tileSet, ecran);
+
+	// Affichage du calque 2 : Explosions
+	mapExplosions->draw(ecran);
+
+	// Affichage du calque 3 : Murs incassables
 	mapWalls->draw(tileSet, ecran);
 
-	if(b1->getStep() != 3)
-        b1->show(ecran);
+	// Affichage du calque 4 : Bombes
+	mapBombs->draw(ecran);
 
-	for(int i = 0; i < NB_PLAYERS ; i++)
-		players[i].show(ecran);
+	// Affichage du calque 5 : Joueurs
+	mapPlayers->draw(ecran);
 
 }
 
