@@ -1,6 +1,6 @@
 #include "Header.h"
 
-// Fonction pour gérer affichage
+// Fonction pour gï¿½rer affichage
 void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip = NULL )
 {
     SDL_Rect offset;
@@ -12,48 +12,25 @@ void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect*
     SDL_BlitSurface( src, clip, dest, &offset );
 }
 
-void start_screen(SDL_Surface *ecran)
-{
-	SDL_Surface *fondIMG;
-	Timer fps;
-	
-	// Animation du logo
-	char filename[64];
-	for (int i = 1 ; i <= 90 ; i++)
-	{
-		fps.start();
-
-		SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0)); /*nettoyage écran*/
-		sprintf(filename ,"../img/start-screen-2/%d.png" ,i);
-		fondIMG = IMG_Load(filename);
-		apply_surface(0,0,fondIMG, ecran);;
-		SDL_Flip(ecran);
-
-		while( fps.get_ticks() < 1000 / FRAMES_PER_SECOND ) {}
-
-		fps.stop();
-	}
-}
-
 void menu(SDL_Surface *ecran)
 {
     // Vars
     SDL_Surface *fondIMG ,*logoIMG ,*buttonStartIMG, *buttonQuitIMG;
     SDL_Rect dimCoordSprite;
 
-    // Préparation du Timer pour les animations
+    // Prï¿½paration du Timer pour les animations
     Timer fps;
 
-    // Préparation de l'objet permettant de gérer les événements
+    // Prï¿½paration de l'objet permettant de gï¿½rer les ï¿½vï¿½nements
     Input in;
 
     // Chargement des images
-    buttonStartIMG = IMG_Load("../img/start-screen/start-button.png");
-    buttonQuitIMG = IMG_Load("../img/start-screen/quit-button.png");
-    fondIMG = IMG_Load("../img/start-screen/start.png");
-    logoIMG = IMG_Load("../img/start-screen/intro/42.png");
+    buttonStartIMG = IMG_Load("img/start-screen/start-button.png");
+    buttonQuitIMG = IMG_Load("img/start-screen/quit-button.png");
+    fondIMG = IMG_Load("img/start-screen/start.png");
+    logoIMG = IMG_Load("img/start-screen/intro/42.png");
 
-    // Préparation de la structure pour les boutons
+    // Prï¿½paration de la structure pour les boutons
     dimCoordSprite.x = 0;
     dimCoordSprite.y = 0;
     dimCoordSprite.w = 147;
@@ -63,7 +40,7 @@ void menu(SDL_Surface *ecran)
     Button *start = new Button(buttonStartIMG ,dimCoordSprite, 2);
     Button *quit = new Button(buttonQuitIMG , dimCoordSprite, 2);
 
-    // Positionnement des boutons sur l'écran
+    // Positionnement des boutons sur l'ï¿½cran
     start->setDimCoordEcranX(260);
     start->setDimCoordEcranY(570);
     quit->setDimCoordEcranX(440);
@@ -124,7 +101,7 @@ void menu(SDL_Surface *ecran)
                 SDL_FreeSurface(fondIMG);
                 SDL_FreeSurface(logoIMG);
 
-                // Reset de l'écran
+                // Reset de l'ï¿½cran
                 SDL_FillRect(ecran , NULL, SDL_MapRGB(ecran->format , 0,0,0));
                 SDL_Flip(ecran);
 
@@ -153,19 +130,19 @@ void menu(SDL_Surface *ecran)
 
 bool checkCollision( SDL_Rect a, SDL_Rect b )
 {
-    // Les côtés des rectangles
+    // Les cï¿½tï¿½s des rectangles
     int leftA, leftB;
     int rightA, rightB;
     int topA, topB;
     int bottomA, bottomB;
 
-    // Côtes de A
+    // Cï¿½tes de A
     leftA = a.x;
     rightA = a.x + a.w;
     topA = a.y;
     bottomA = a.y + a.h;
 
-    // Côtes de B
+    // Cï¿½tes de B
     leftB = b.x;
     rightB = b.x + b.w;
     topB = b.y;
@@ -203,12 +180,11 @@ void init(SDL_Surface** s)
 
 void play(SDL_Surface * ecran)
 {
-    // Objet pour gérer les événements
+    // Objet pour gï¿½rer les ï¿½vï¿½nements
 	Input in;
-
 	// Instanciation des joueurs
-	Player p1, p2, p3;
-	p2.setSprite(IMG_Load("../img/sprites/player2.png"));
+	Player p1,p2,p3;
+	p2.setSprite(IMG_Load("img/sprites/player2.png"));
 	Player players[NB_PLAYERS] = { (Player) p1, (Player) p2, (Player) p3};
 
 	// Instanciation du jeu
@@ -228,7 +204,7 @@ void play(SDL_Surface * ecran)
 		previous = current;
 		lag += elapsed;
 
-		// Mise à jour des événements
+		// Mise ï¿½ jour des ï¿½vï¿½nements
 		in.Update();
 
 		// Evolution du jeu, en fonction du lag
@@ -237,10 +213,41 @@ void play(SDL_Surface * ecran)
 			g->evolue(in);
 			i++;
 			lag -= MS_PER_UPDATE;
-		}
+                }
 
-		// Génération de la map
+		// Gï¿½nï¿½ration de la map
 		g->render();
 		g->flip();
 	}
+}
+
+vector<int> parseStageFile(string filePath)
+{
+    vector<int> res;
+    
+    ifstream is ("stages/stage-1.txt", std::ifstream::binary);
+        
+    if (is) {
+        is.seekg (0, is.end);
+        int length = is.tellg();
+        is.seekg (0, is.beg);
+
+        char * buffer = new char [length];
+        is.read (buffer,length);
+        
+        vector<int> tmp;
+        for(int i = 0, x = 0 , y = 0; i < length ; i++)
+        {
+            x++;
+            char nb = buffer[i];
+            int inb = nb - '0';
+            res.push_back(inb);
+        }
+        
+        is.close();
+        
+        delete[] buffer;
+        
+        return res;
+    }
 }

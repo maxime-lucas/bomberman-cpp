@@ -3,16 +3,19 @@
 
 Bomb::Bomb() : Shape()
 {
-	this->sprite = IMG_Load("../img/sprites/bomb.png"); /*chargement de l'image du personnage*/
+	this->sprite = IMG_Load("img/sprites/bomb.png"); /*chargement de l'image du personnage*/
 	this->nbSprites = 2; /*nb d'images pour l'animation du perso*/
 
 	this->dimCoordSprite.w = 50; /*largeur d'une image de l'animation*/
 	this->dimCoordSprite.h = 50; /*hauteur d'une image de l'animation*/
-	this->dimCoordSprite.x = 0; /*coordonnée x d'affichage à l'écran de départ*/
-	this->dimCoordSprite.y = 0; /*coordonnée y de départ*/
+	this->dimCoordSprite.x = 0; /*coordonnï¿½e x d'affichage ï¿½ l'ï¿½cran de dï¿½part*/
+	this->dimCoordSprite.y = 0; /*coordonnï¿½e y de dï¿½part*/
 
+        this->dimCoordEcran.w = dimCoordSprite.w;
+        this->dimCoordEcran.h = dimCoordSprite.h;
+        
 	this->step = 1;
-	this->delay = 8000;
+	this->delay = 4000;
 	this->dateOfExplosion = SDL_GetTicks() + delay;
 }
 
@@ -22,7 +25,16 @@ Bomb::~Bomb()
 
 void Bomb::show(SDL_Surface * dest)
 {
+    if( DEBUG_MODE )
+    {
+        SDL_Surface *s;
+        s = SDL_CreateRGBSurface(0,dimCoordEcran.w , dimCoordEcran.h , SCREEN_BPP, 0,255,255,0);
+        apply_surface(dimCoordEcran.x , dimCoordEcran.y , s, dest, NULL );   
+    }
+    
     apply_surface(dimCoordEcran.x , dimCoordEcran.y , sprite, dest ,&dimCoordSprite);
+    
+    
 }
 
 void Bomb::nextStep()

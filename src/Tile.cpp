@@ -9,6 +9,8 @@ Tile::Tile( int x, int y, int tileType )
 	box.h = TILE_HEIGHT;
 	
 	type = tileType;
+        
+        enabled =true;
 }
 
 void Tile::show(TileSet *ts,SDL_Surface *dest)

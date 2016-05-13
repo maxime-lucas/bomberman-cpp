@@ -9,15 +9,19 @@ Player::Player() : Shape()
 
 	this->speed = DEFAULT_SPEED;
 
-	this->nbBomb = 5;
-
-	this->sprite = IMG_Load("../img/sprites/player1.png"); /*chargement de l'image du personnage*/
+	this->nbBomb = 10;
+        if( DEBUG_MODE )
+            this->nbBomb += 100;
+        
+	this->sprite = IMG_Load("img/sprites/player1.png"); /*chargement de l'image du personnage*/
 	this->nbSprites = 6; /*nb d'images pour l'animation du perso*/
 
 	this->dimCoordSprite.w = 40; /*largeur d'une image de l'animation*/
 	this->dimCoordSprite.h = 67; /*hauteur d'une image de l'animation*/
 	this->dimCoordSprite.x = 0; /*coordonnée x d'affichage à l'écran de départ*/
 	this->dimCoordSprite.y = this->direction * this->dimCoordSprite.h; /*coordonnée y de départ*/
+        
+        this->alive = true;
 }
 
 Player::Player(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb)
@@ -28,13 +32,17 @@ Player::~Player()
 }
 
 void Player::show(SDL_Surface *dest)
-{
-	// Pour voir les boites de collisions, dé-commentez ce qui suit :
-		//SDL_Surface *s;
-		//s = SDL_CreateRGBSurface(0,box.w , box.h , SCREEN_BPP, 0,255,255,0);
-		//apply_surface(box.x , box.y , s, dest, NULL );
-		
+{	
+    if( DEBUG_MODE )
+    {
+        SDL_Surface *s;
+        s = SDL_CreateRGBSurface(0,box.w , box.h , SCREEN_BPP, 0,255,255,0);
+        apply_surface(box.x , box.y , s, dest, NULL );   
+    }
+    
     apply_surface(dimCoordEcran.x , dimCoordEcran.y , sprite, dest ,&dimCoordSprite);
+    
+    
     
 }
 
@@ -94,8 +102,7 @@ void Player::updateBox()
 
 void Player::dropBomb()
 {
-    this->nbBomb--;
-    printf("%p : Oh damn it, I dropped a bomb !\n", this);  
+    this->nbBomb--;  
 }
 
 void Player::pickBomb()
