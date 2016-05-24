@@ -197,11 +197,10 @@ void play(SDL_Surface * ecran)
 	Input in;
 
 	// Instanciation des joueurs
-	Player p1, p2, p3, p4;
+	Player p1, p2;
 	p2.setSprite(IMG_Load("img/sprites/player2.png"));
-	p3.setSprite(IMG_Load("img/sprites/player3.png"));
-	p4.setSprite(IMG_Load("img/sprites/player4.png"));
-	Player players[NB_PLAYERS] = { (Player) p1, (Player) p2, (Player) p3, (Player) p4};
+	//p4.setSprite(IMG_Load("img/sprites/player4.png"));
+	Player players[NB_PLAYERS] = { (Player) p1, (Player) p2};
 
 	// Instanciation du jeu
 	Game *g = new Game( ecran, players);
@@ -238,7 +237,33 @@ void play(SDL_Surface * ecran)
 	start_screen(ecran);
 }
 
-void menu(SDL_Surface * ecran)
+vector<int> parseStageFile(string filePath)
 {
+    vector<int> res;
 
+    ifstream is ("stages/stage-1.txt", std::ifstream::binary);
+
+    if (is) {
+        is.seekg (0, is.end);
+        int length = is.tellg();
+        is.seekg (0, is.beg);
+
+        char * buffer = new char [length];
+        is.read (buffer,length);
+
+        vector<int> tmp;
+        for(int i = 0, x = 0 , y = 0; i < length ; i++)
+        {
+            x++;
+            char nb = buffer[i];
+            int inb = nb - '0';
+            res.push_back(inb);
+        }
+
+        is.close();
+
+        delete[] buffer;
+
+        return res;
+    }
 }

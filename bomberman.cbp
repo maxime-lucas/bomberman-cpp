@@ -37,22 +37,17 @@
 			<Add directory="C:/Program Files (x86)/CodeBlocks/SDL-1.2.15/lib" />
 		</Linker>
 		<Unit filename="Bomb.cpp" />
-		<Unit filename="BombMap.cpp" />
 		<Unit filename="Button.cpp" />
 		<Unit filename="Classes.h" />
 		<Unit filename="Explosion.cpp" />
-		<Unit filename="ExplosionMap.cpp" />
 		<Unit filename="Functions.cpp" />
 		<Unit filename="Functions.h" />
 		<Unit filename="Game.cpp" />
 		<Unit filename="Header.h" />
 		<Unit filename="Input.cpp" />
-		<Unit filename="Map.cpp" />
 		<Unit filename="Player.cpp" />
-		<Unit filename="PlayerMap.cpp" />
 		<Unit filename="Shape.cpp" />
 		<Unit filename="Tile.cpp" />
-		<Unit filename="TileMap.cpp" />
 		<Unit filename="TileSet.cpp" />
 		<Unit filename="Timer.cpp" />
 		<Unit filename="main.cpp" />

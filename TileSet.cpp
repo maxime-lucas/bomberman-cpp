@@ -18,4 +18,9 @@ TileSet::TileSet()
 	clips[ TILE_WALL ].y = 0;
 	clips[ TILE_WALL ].w = TILE_WIDTH;
 	clips[ TILE_WALL ].h = TILE_HEIGHT;
+
+    clips[ TILE_WOOD ].x = 3 * TILE_WIDTH;
+	clips[ TILE_WOOD ].y = 0;
+	clips[ TILE_WOOD ].w = TILE_WIDTH;
+	clips[ TILE_WOOD ].h = TILE_HEIGHT;
 }

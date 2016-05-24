@@ -7,5 +7,6 @@
 	bool checkCollision( SDL_Rect, SDL_Rect);
 	void play(SDL_Surface*);
 	void menu(SDL_Surface*);
+	vector<int> parseStageFile(string);
 
 #endif // FUNCTIONS_H_INCLUDED

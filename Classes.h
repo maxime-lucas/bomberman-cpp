@@ -6,9 +6,9 @@
 class Shape
 {
 	protected:
-		SDL_Rect dimCoordSprite; // Coordonnées dans l'image
-		SDL_Rect dimCoordEcran; // Coordonnées dans l'écran
-		SDL_Surface *sprite; // Feuille de sprite stockée ici
+		SDL_Rect dimCoordSprite; // Coordonnï¿½es dans l'image
+		SDL_Rect dimCoordEcran; // Coordonnï¿½es dans l'ï¿½cran
+		SDL_Surface *sprite; // Feuille de sprite stockï¿½e ici
 		int nbSprites; // Nombre de sprites (surtout pour les personnages)
 
 	public:
@@ -35,6 +35,8 @@ class Shape
 		int getDimCoordSpriteW();
 		int getDimCoordSpriteH();
 
+                SDL_Rect getDimCoordEcran() { return dimCoordEcran; };
+
 		void setSprite(SDL_Surface*);
 };
 
@@ -43,12 +45,13 @@ class Player : public Shape
 {
 	protected:
 	    int xVel , yVel; // Vecteurs vitesse du personnage
-	    int speed; // vitesse de déplacement du personnage
+	    int speed; // vitesse de dï¿½placement du personnage
 	    int direction; //North = 0 , South = 1 , East = 2 , West = 3
 	    void updateSprite();
 	    SDL_Rect box;
 	    void updateBox();
 	    int nbBomb;
+            bool alive;
 
 	public:
 		Player();
@@ -56,7 +59,7 @@ class Player : public Shape
 		virtual ~Player();
 		void show(SDL_Surface*);
 
-		// Déplacement du sprite
+		// Dï¿½placement du sprite
 		void MoveUp();
 		void MoveDown();
 		void MoveLeft();
@@ -73,9 +76,11 @@ class Player : public Shape
 		void setYvel(int y){ this->yVel = y; }
 		int getYvel() { return this->yVel; }
 		int getSpeed() { return this->speed; }
-		SDL_Rect getBox(){ return this->box; }
-		void setBox(SDL_Rect box){ this->box = box; }
 		int getNbBomb() { return this->nbBomb; }
+                void setAlive(bool k) { alive = k; };
+                bool isAlive() { return alive; };
+                SDL_Rect getBox() { return box; };
+                void setBox(SDL_Rect b) { this->box = b; };
 };
 
 class Button : public Shape
@@ -98,10 +103,10 @@ class Button : public Shape
 class Timer
 {
 	private:
-		//Le temps quand le timer est lancé
+		//Le temps quand le timer est lancï¿½
 		int startTicks;
 
-		//Les "ticks" enregistré quand le Timer a été mit en pause
+		//Les "ticks" enregistrï¿½ quand le Timer a ï¿½tï¿½ mit en pause
 		int pausedTicks;
 
 		//Le status du Timer
@@ -112,17 +117,17 @@ class Timer
 		//Initialise les variables
 		Timer();
 
-		//Les différentes actions du timer
+		//Les diffï¿½rentes actions du timer
 		void start();
 		void stop();
 		void pause();
 		void unpause();
 
-		//recupére le nombre de ticks depuis que le timer a été lancé
-		//ou récupére le nombre de ticks depuis que le timer a été mis en pause
+		//recupï¿½re le nombre de ticks depuis que le timer a ï¿½tï¿½ lancï¿½
+		//ou rï¿½cupï¿½re le nombre de ticks depuis que le timer a ï¿½tï¿½ mis en pause
 		int get_ticks();
 
-		//Fonctions de vérification du status du timer
+		//Fonctions de vï¿½rification du status du timer
 		bool is_started();
 		bool is_paused();
 };
@@ -168,68 +173,48 @@ class Tile
 	protected :
 		SDL_Rect box;
 		int type;
+                bool enabled;
 
 	public:
 		Tile( int, int, int);
 		void show(TileSet*, SDL_Surface*);
 		int getType();
 		SDL_Rect getBox();
+                bool isEnabled() const { return enabled; }
+                void setEnabled(bool enabled) { this->enabled = enabled; }
+
 };
 
-class Map
+class Explosion: public Shape
 {
 	protected :
-		void **tab;
-		int nb;
+		int step;
+		int duration;
+		int strength;
+		int dateOfEnd;
+		std::vector<SDL_Rect> collisionBoxes;
+
 	public :
-		Map();
-		Map& operator=(const Map&);
-		~Map();
+		Explosion();
+                Explosion(int, int);
+		~Explosion();
+		void nextSprite();
+		void nextStep();
+		void show(SDL_Surface*);
+		void resetSprite();
 
-		void add(void *);
-		void remove(void *);
-		void* get(int i) { return tab[i]; }
-		int getNb(){ return nb; }
-};
+		int getStrength() { return strength; };
+		int getStep() { return step;};
+		int getDateOfEnd() { return dateOfEnd; };
+		int getDuration() { return duration;};
 
-class TileMap : public Map
-{
-	protected :
-	public :
-		TileMap();
-		~TileMap();
+		void evolueUp();
+		void evolueDown();
+		void evolueLeft();
+		void evolueRight();
 
-		void draw(TileSet*, SDL_Surface*);
-};
-
-class BombMap : public Map
-{
-	protected :
-	public :
-		BombMap();
-		~BombMap();
-
-		void draw(SDL_Surface*);
-};
-
-class ExplosionMap : public Map
-{
-	protected :
-	public :
-		ExplosionMap();
-		~ExplosionMap();
-
-		void draw(SDL_Surface*);
-};
-
-class PlayerMap : public Map
-{
-	protected :
-	public :
-		PlayerMap();
-		~PlayerMap();
-
-		void draw(SDL_Surface*);
+                std::vector<SDL_Rect> getCollisionBoxes() const { return collisionBoxes; }
+                void setCollisionBoxes(std::vector<SDL_Rect> collisionBoxes) { this->collisionBoxes = collisionBoxes; }
 };
 
 class Bomb: public Shape
@@ -251,57 +236,72 @@ class Bomb: public Shape
 	    int dateOfExplosion;
 };
 
-class Explosion: public Shape
+class Animation
 {
-	protected :
-		int step;
-		int duration;
-		int strength;
-		int dateOfEnd;
-		SDL_Rect collisionBoxes[];
+    protected:
+        SDL_Surface* img;
+        string path;
+        int nbFrames;
+        int currentFrame;
 
-	public :
-		Explosion();
-		~Explosion();
-		void nextSprite();
-		void nextStep();
-		void show(SDL_Surface*);
-		void resetSprite();
+    public:
+        Animation();
+        Animation(char*, int);
+        ~Animation();
+        void nextFrame();
+        void render(SDL_Surface*);
+        void resetFrames();
 
-		void evolueUp();
-		void evolueDown();
-		void evolueLeft();
-		void evolueRight();
+        int getCurrentFrame() { return currentFrame; };
+        int getNbFrames() { return nbFrames; };
+        void setNbFrames(int i) { this->nbFrames = i; };
+        string getPath() { return this->path; };
+        void setPath(string p) { this->path = p; };
+};
 
-		int getStrength() {return strength; };
-		int getStep() {return step;};
-		int getDateOfEnd() {return dateOfEnd;};
-		int getDuration() {return duration;};
+class AnimationPlayer : public Animation
+{
+    protected:
+        int indexPlayer;
+
+    public:
+        AnimationPlayer();
+        AnimationPlayer(char*, int, int);
+        ~AnimationPlayer();
+        void render(SDL_Surface*);
+        void setIndexPlayer(int i) { this->indexPlayer = i; };
 };
 
 class Game
 {
 	protected :
-		TileMap *mapBackground;
-		TileMap *mapWalls;
-		BombMap *mapBombs;
-		PlayerMap *mapPlayers;
-		ExplosionMap *mapExplosions;
+		std::vector<Tile *> mapBackground;
+		std::vector<Tile *> mapWalls;
+		std::vector<Bomb *> mapBombs;
+		std::vector<Explosion*> mapExplosions;
+                std::vector<Player*> mapPlayers;
+
+                int nbPlayersAlive;
 
 		TileSet *tileSet;
 		SDL_Surface* ecran;
 
+                bool endOfGame;
+
 	public :
-		Game(SDL_Surface*);
 		Game(SDL_Surface*, Player[]);
 		void setupGame();
 		void evolue(Input&);
 		void render();
 		void flip();
 
-		bool touchesTile( SDL_Rect , TileMap* , int );
+		bool explosionTouchesTile( SDL_Rect box, std::vector<Tile*> tm );
+                bool touchesTile( SDL_Rect box, std::vector<Tile*> tm );
+                bool touchesBomb( SDL_Rect box, std::vector<Bomb*> bm );
+                void evolueExplosion( int );
+                void updateBomb( int );
+                void updateExplosion( int );
+                void killPlayer(int);
 };
-
-
 
 #endif // CLASSES_H_INCLUDED

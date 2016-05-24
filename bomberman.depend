@@ -2,9 +2,14 @@
 1463083817 source:d:\projets\c++\bomberman-cpp\main.cpp
 	"Header.h"
 
-1463083619 d:\projets\c++\bomberman-cpp\header.h
+1464081569 d:\projets\c++\bomberman-cpp\header.h
 	<stdio.h>
 	<stdlib.h>
+	<vector>
+	<iostream>
+	<fstream>
+	<string>
+	<time.h>
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
@@ -217,10 +222,10 @@
 1462973750 source:d:\projets\c++\bomberman-cpp\bomber.cpp
 	"Header.h"
 
-1463041174 d:\projets\c++\bomberman-cpp\classes.h
+1464078448 d:\projets\c++\bomberman-cpp\classes.h
 	"Header.h"
 
-1462975560 d:\projets\c++\bomberman-cpp\functions.h
+1464077068 d:\projets\c++\bomberman-cpp\functions.h
 
 1462977026 source:d:\projets\c++\bomberman-cpp\figure.cpp
 	"Header.h"
@@ -234,34 +239,34 @@
 1462813690 source:d:\projets\c++\bomberman-cpp\button.cpp
 	"Header.h"
 
-1463083894 source:d:\projets\c++\bomberman-cpp\functions.cpp
+1464081311 source:d:\projets\c++\bomberman-cpp\functions.cpp
 	"Header.h"
 
-1463084136 source:d:\projets\c++\bomberman-cpp\game.cpp
+1464081463 source:d:\projets\c++\bomberman-cpp\game.cpp
 	"Header.h"
 
 1462813690 source:d:\projets\c++\bomberman-cpp\input.cpp
 	"Header.h"
 
-1462813690 source:d:\projets\c++\bomberman-cpp\tile.cpp
+1464077745 source:d:\projets\c++\bomberman-cpp\tile.cpp
 	"Header.h"
 
 1463038371 source:d:\projets\c++\bomberman-cpp\tilemap.cpp
 	"Header.h"
 
-1462814525 source:d:\projets\c++\bomberman-cpp\tileset.cpp
+1464077812 source:d:\projets\c++\bomberman-cpp\tileset.cpp
 	"Header.h"
 
 1325742239 c:\program files (x86)\codeblocks\sdl-1.2.15\include\sdl_getenv.h
 	"SDL_stdinc.h"
 
-1463039695 source:d:\projets\c++\bomberman-cpp\bomb.cpp
+1464075869 source:d:\projets\c++\bomberman-cpp\bomb.cpp
 	"Header.h"
 
 1463038371 source:d:\projets\c++\bomberman-cpp\bombmap.cpp
 	"Header.h"
 
-1463041192 source:d:\projets\c++\bomberman-cpp\explosion.cpp
+1464076195 source:d:\projets\c++\bomberman-cpp\explosion.cpp
 	"Header.h"
 
 1463038371 source:d:\projets\c++\bomberman-cpp\explosionmap.cpp
@@ -270,7 +275,7 @@
 1463038371 source:d:\projets\c++\bomberman-cpp\map.cpp
 	"Header.h"
 
-1463039695 source:d:\projets\c++\bomberman-cpp\player.cpp
+1464077591 source:d:\projets\c++\bomberman-cpp\player.cpp
 	"Header.h"
 
 1463038371 source:d:\projets\c++\bomberman-cpp\playermap.cpp

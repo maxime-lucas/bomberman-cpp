@@ -4,11 +4,13 @@ Tile::Tile( int x, int y, int tileType )
 {
 	box.x = x;
 	box.y = y;
-	
+
 	box.w = TILE_WIDTH;
 	box.h = TILE_HEIGHT;
-	
+
 	type = tileType;
+
+	enabled = true;
 }
 
 void Tile::show(TileSet *ts,SDL_Surface *dest)
@@ -26,4 +28,4 @@ int Tile::getType()
 SDL_Rect Tile::getBox()
 {
 	return box;
-} 
+}
