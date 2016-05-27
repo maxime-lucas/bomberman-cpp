@@ -15,7 +15,7 @@ Bomb::Bomb() : Shape()
         this->dimCoordEcran.h = dimCoordSprite.h;
         
 	this->step = 1;
-	this->delay = 4000;
+	this->delay = 2000;
 	this->dateOfExplosion = SDL_GetTicks() + delay;
 }
 
