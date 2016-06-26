@@ -8,8 +8,8 @@ Game::Game(SDL_Surface *ecran, Player players[])
 
     for(int i = 0; i < NB_PLAYERS; i++)
     {
-        Player *p = &players[i];
-        mapPlayers.push_back(p);
+        Player p = players[i];
+        mapPlayers.push_back(&p);
     }
     
     nbPlayersAlive = NB_PLAYERS;
@@ -47,7 +47,7 @@ void Game::setupGame()
         
         // Placement des blocs aleatoires au centre
         srand(time(NULL));
-        for(int i = 0; i < 100 ; i++)
+        for(int i = 0; i < 50 ; i++)
         {
             int x = rand() % 13 + 2;
             int y = rand() % 9 + 2;
@@ -121,19 +121,86 @@ void Game::setupGame()
 
 }
 
+void Game::doMoveUp(Player *p) {
+    p->setYvel((p->getSpeed() / (FRAMES_PER_SECOND)));
+    p->MoveUp();
+
+    if( touchesTile(p->getBox(), mapWalls) )
+    {
+        p->setDimCoordEcranY(p->getDimCoordEcranY() + p->getYvel() );
+    }
+}
+
+void Game::doMoveRight(Player *p) {
+    p->setXvel((p->getSpeed() / (FRAMES_PER_SECOND)));
+    p->MoveRight();
+
+    if(touchesTile(p->getBox(), mapWalls) )
+    {
+        p->setDimCoordEcranX(p->getDimCoordEcranX() - p->getXvel() );
+    }
+}
+
+void Game::doMoveLeft(Player *p) {
+    p->setXvel((p->getSpeed() / (FRAMES_PER_SECOND)));
+    p->MoveLeft();
+
+    if(touchesTile(p->getBox(), mapWalls) )
+    {
+        p->setDimCoordEcranX(p->getDimCoordEcranX() + p->getXvel() );
+    }
+}
+
+void Game::doMoveDown(Player *p) {
+    p->setYvel((p->getSpeed() / (FRAMES_PER_SECOND)));
+    p->MoveDown();
+
+    if(touchesTile(p->getBox(), mapWalls) )
+    {
+        p->setDimCoordEcranY(p->getDimCoordEcranY() - p->getYvel() );
+    }
+}
+
+void Game::doDropBomb(Player *p) {
+    // On vérifie que le joueur a au moins une bombe à poser
+    if( p->getNbBomb() > 0 )
+    {
+        // Instanciation d'une nouvelle bombe
+        Bomb *b = new Bomb();
+
+        // Placement de la bombe aux coordonnées du joueur qui l'a posé
+        int x = p->getDimCoordEcranX();
+        int y = p->getDimCoordEcranY() + p->getDimCoordSpriteH();
+        x = x - x % TILE_WIDTH;
+        y = y - y % TILE_HEIGHT;
+
+        b->setDimCoordEcranX(x);
+        b->setDimCoordEcranY(y);
+
+        // Décrémentation du nombre de bombes du joueur qui l'a posé
+        p->dropBomb();
+
+        // Ajout de la bombe au Map correspondant
+        mapBombs.push_back(b);
+    }
+}
+
 void Game::evolue(Input& in)
 {
     if(endOfAnimation)
         in.setQuit(1);
     
-    // Tableau des contrôles des joueurs
+    // Tableau des contrôles des joueurs (clavier)
     SDLKey tabkey[3][5] = 
     { 
         {SDLK_z,SDLK_s,SDLK_q,SDLK_d, SDLK_a}, 
         {SDLK_UP,SDLK_DOWN,SDLK_LEFT,SDLK_RIGHT, SDLK_RSHIFT}, 
         {SDLK_KP8, SDLK_KP5, SDLK_KP4, SDLK_KP6, SDLK_KP7},
     };
-
+    
+    // Tableau des controles des joueurs (joystick)
+    int tabjoy[] = {1,4,8,2,0};
+    
     // Ecoute du clavier et Actions en conséquence
     for(int i=0; i<NB_PLAYERS; i++ )
     {
@@ -142,88 +209,86 @@ void Game::evolue(Input& in)
         
         if( p->isAlive() )
         {
-            // Mouvement vers le haut :
-            if( in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
-            {
-                p->setYvel((p->getSpeed() / (FRAMES_PER_SECOND)));
-                p->MoveUp();
-
-                if( touchesTile(p->getBox(), mapWalls) )
+            if( in.getNbJoysticks() > 0 && ( i - in.getNbJoysticks() ) < 0 ) {
+                // Mouvement vers le haut :
+                if( in.getHat(i,0) ==  tabjoy[0] )
                 {
-                    p->setDimCoordEcranY(p->getDimCoordEcranY() + p->getYvel() );
+                    doMoveUp(p);
                 }
-            }
 
-            // Mouvement vers le bas :
-            if( !in.getKey(tabkey[i][0]) && in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
-            {
-                p->setYvel((p->getSpeed() / (FRAMES_PER_SECOND)));
-                p->MoveDown();
-
-                if(touchesTile(p->getBox(), mapWalls) )
+                // Mouvement vers le bas :
+                if( in.getHat(i,0) ==  tabjoy[1] )
                 {
-                    p->setDimCoordEcranY(p->getDimCoordEcranY() - p->getYvel() );
+                    doMoveDown(p);
                 }
-            }
 
-            // Mouvement vers la gauche :
-            if( !in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
-            {
-                p->setXvel((p->getSpeed() / (FRAMES_PER_SECOND)));
-                p->MoveLeft();
-
-                if(touchesTile(p->getBox(), mapWalls) )
+                // Mouvement vers la gauche :
+                if( in.getHat(i,0) ==  tabjoy[2] )
                 {
-                    p->setDimCoordEcranX(p->getDimCoordEcranX() + p->getXvel() );
+                    doMoveLeft(p);
                 }
-            }
 
-            // Mouvement vers la droite :
-            if( !in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && in.getKey(tabkey[i][3]))
-            {
-                p->setXvel((p->getSpeed() / (FRAMES_PER_SECOND)));
-                p->MoveRight();
-
-                if(touchesTile(p->getBox(), mapWalls) )
+                // Mouvement vers la droite :
+                if( in.getHat(i,0) ==  tabjoy[3] )
                 {
-                    p->setDimCoordEcranX(p->getDimCoordEcranX() - p->getXvel() );
+                    doMoveRight(p);
                 }
-            }
 
-            // Remise à 0 du sprite, dès qu'on relâche toutes les touches de déplacement
-            if( !in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
-            {
-                p->resetSprite();
-            }
-
-            // Pose d'une bombe
-            if( in.getKey(tabkey[i][4] ) )
-            {
-                // Remise à 0 de la touche, pour éviter la pose de bombe en restant appuyé :
-                in.resetKey(tabkey[i][4]);
-
-                // On vérifie que le joueur a au moins une bombe à poser
-                if( p->getNbBomb() > 0 )
+                // Remise à 0 du sprite, dès qu'on relâche toutes les touches de déplacement
+                if( in.getHat(i,0) !=  tabjoy[0] && in.getHat(i,0) !=  tabjoy[1] && in.getHat(i,0) !=  tabjoy[2] && in.getHat(i,0) !=  tabjoy[3] )
                 {
-                    // Instanciation d'une nouvelle bombe
-                    Bomb *b = new Bomb();
+                    p->resetSprite();
+                }
+                
+                // Pose d'une bombe
+                if( in.getButton(i, tabjoy[4]) )
+                {
+                    // Remise à 0 de la touche, pour éviter la pose de bombe en restant appuyé :
+                    in.resetButton(i,tabjoy[4]);
 
-                    // Placement de la bombe aux coordonnées du joueur qui l'a posé
-                    int x = p->getDimCoordEcranX();
-                    int y = p->getDimCoordEcranY() + p->getDimCoordSpriteH();
-                    x = x - x % TILE_WIDTH;
-                    y = y - y % TILE_HEIGHT;
+                    doDropBomb(p);
+                }
+                
+            }   else {
+                // Mouvement vers le haut :
+                if( in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
+                {
+                    doMoveUp(p);
+                }
 
-                    b->setDimCoordEcranX(x);
-                    b->setDimCoordEcranY(y);
+                // Mouvement vers le bas :
+                if( !in.getKey(tabkey[i][0]) && in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
+                {
+                    doMoveDown(p);
+                }
 
-                    // Décrémentation du nombre de bombes du joueur qui l'a posé
-                    p->dropBomb();
+                // Mouvement vers la gauche :
+                if( !in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
+                {
+                    doMoveLeft(p);
+                }
 
-                    // Ajout de la bombe au Map correspondant
-                    mapBombs.push_back(b);
-                }	
-            }
+                // Mouvement vers la droite :
+                if( !in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && in.getKey(tabkey[i][3]))
+                {
+                    doMoveRight(p);
+                }
+
+                // Remise à 0 du sprite, dès qu'on relâche toutes les touches de déplacement
+                if( !in.getKey(tabkey[i][0]) && !in.getKey(tabkey[i][1]) && !in.getKey(tabkey[i][2]) && !in.getKey(tabkey[i][3]))
+                {
+                    p->resetSprite();
+                }
+                
+                // Pose d'une bombe
+                if( in.getKey(tabkey[i][4] ) )
+                {
+                    // Remise à 0 de la touche, pour éviter la pose de bombe en restant appuyé :
+                    in.resetKey(tabkey[i][4]);
+
+                    doDropBomb(p);	
+                }
+            }      
         }    
     }
 	
@@ -288,47 +353,47 @@ void Game::evolue(Input& in)
 
 void Game::render()
 {
-	// Réinitialisation de l'écran
-	SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
+    // Réinitialisation de l'écran
+    SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
 
-	// Affichage du calque 1 : Background
-	for(int i = 0 ; i < mapBackground.size() ; i++)
-            mapBackground[i]->show(tileSet,ecran);
-	
-	// Affichage du calque 2 : Explosions
-	for(int i = 0 ; i < mapExplosions.size() ; i++)
-            mapExplosions[i]->show(ecran);
-	
-	// Affichage du calque 3 : Murs
-	for(int i = 0 ; i < mapWalls.size() ; i++)
-            if( mapWalls[i]->isEnabled() )
-                mapWalls[i]->show(tileSet,ecran);       
+    // Affichage du calque 1 : Background
+    for(int i = 0 ; i < mapBackground.size() ; i++)
+        mapBackground[i]->show(tileSet,ecran);
+    
+    // Affichage du calque 2 : Explosions
+    for(int i = 0 ; i < mapExplosions.size() ; i++)
+        mapExplosions[i]->show(ecran);
 
-	// Affichage du calque 4 : Bombes
-	for(int i = 0 ; i < mapBombs.size() ; i++)
-            mapBombs[i]->show(ecran);
-	
-	// Affichage du calque 5 : Joueurs
-	for(int i = 0 ; i < mapPlayers.size() ; i++)
-            if( mapPlayers[i]->isAlive() )
-                mapPlayers[i]->show(ecran);
-         
-        if(title != NULL )
+    // Affichage du calque 3 : Murs
+    for(int i = 0 ; i < mapWalls.size() ; i++)
+        if( mapWalls[i]->isEnabled() )
+            mapWalls[i]->show(tileSet,ecran);       
+
+    // Affichage du calque 4 : Bombes
+    for(int i = 0 ; i < mapBombs.size() ; i++)
+        mapBombs[i]->show(ecran);
+
+    // Affichage du calque 5 : Joueurs
+    for(int i = 0 ; i < mapPlayers.size() ; i++)
+        if( mapPlayers[i]->isAlive() )
+            mapPlayers[i]->show(ecran);
+
+    if(title != NULL )
+    {
+        if(title->getCurrentFrame() == title->getNbFrames())
         {
-            if(title->getCurrentFrame() == title->getNbFrames())
-            {
-                delete title;
-                title = NULL;
-                
-                if(endOfGame)
-                    endOfAnimation = true;
-            }
-            else
-            {
-                title->render(ecran);
-                title->nextFrame();
-            }
+            delete title;
+            title = NULL;
+
+            if(endOfGame)
+                endOfAnimation = true;
         }
+        else
+        {
+            title->render(ecran);
+            title->nextFrame();
+        }
+    }
 }
 
 void Game::flip()

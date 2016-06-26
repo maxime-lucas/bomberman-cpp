@@ -54,33 +54,34 @@ class Player : public Shape
             bool alive;
 
 	public:
-		Player();
-		Player(SDL_Surface* , SDL_Rect , int);
-		virtual ~Player();
-		void show(SDL_Surface*);
+            Player();
+            Player(SDL_Surface* , SDL_Rect , int);
+            ~Player();
+            Player& operator=(const Player&);
+            void show(SDL_Surface*);
 
-		// D�placement du sprite
-		void MoveUp();
-		void MoveDown();
-		void MoveLeft();
-		void MoveRight();
-		void resetSprite();
-                
-		// Gestion des bombes
-		void dropBomb();
-		void pickBomb();
+            // D�placement du sprite
+            void MoveUp();
+            void MoveDown();
+            void MoveLeft();
+            void MoveRight();
+            void resetSprite();
 
-		// Accesseurs
-		void setXvel(int x){ this->xVel = x; }
-		int getXvel() { return this->xVel; }
-		void setYvel(int y){ this->yVel = y; }
-		int getYvel() { return this->yVel; }
-		int getSpeed() { return this->speed; }
-		int getNbBomb() { return this->nbBomb; }
-                void setAlive(bool k) { alive = k; };
-                bool isAlive() { return alive; };
-                SDL_Rect getBox() { return box; };
-                void setBox(SDL_Rect b) { this->box = b; };
+            // Gestion des bombes
+            void dropBomb();
+            void pickBomb();
+
+            // Accesseurs
+            void setXvel(int x){ this->xVel = x; }
+            int getXvel() { return this->xVel; }
+            void setYvel(int y){ this->yVel = y; }
+            int getYvel() { return this->yVel; }
+            int getSpeed() { return this->speed; }
+            int getNbBomb() { return this->nbBomb; }
+            void setAlive(bool k) { alive = k; };
+            bool isAlive() { return alive; };
+            SDL_Rect getBox() { return box; };
+            void setBox(SDL_Rect b) { this->box = b; };
 };
 
 class Button : public Shape
@@ -98,7 +99,6 @@ class Button : public Shape
 		bool isHovered(int, int);
 		void toString();
 };
-
 
 class Timer
 {
@@ -132,28 +132,52 @@ class Timer
 		bool is_paused();
 };
 
+class InputJoystick
+{
+    friend class Input;
+    
+    protected:
+        SDL_Joystick* joystick;
+        char* buttons;
+        int* hats;
+        int id;	
+
+    public:
+};
+
 class Input
 {
-	protected:
-		char key[SDLK_LAST];
-		int mouseX, mouseY;
-		int mouseXRel, mouseYRel;
-		char mouseButtons[8];
-		char quit;
+    friend class InputJoystick;
+    
+    protected:
+            char key[SDLK_LAST];
+            int mouseX, mouseY;
+            int mouseXRel, mouseYRel;
+            int nbJoysticks;
+            InputJoystick* joysticks;
 
-	public:
-		Input();
-		~Input();
-		void Update();
-		void resetKey(int i) { this->key[i] = 0; };
-		char& getKey(int i) { return key[i]; }
-		int getMouseX(){ return mouseX; }
-		int getMouseY(){ return mouseY; }
-		int getMouseXRel(){ return mouseXRel; }
-		int getMouseYRel(){ return mouseYRel; }
-		int getMouseButton(int i){ return mouseButtons[i]; }
-		int getQuit(){ return quit; }
-		void setQuit(int i){this->quit = i; }
+            char mouseButtons[8];
+            char quit;
+
+    public:
+            Input();
+            ~Input();
+
+            void update();
+            void resetKey(int i) { this->key[i] = 0; };
+            void resetButton(int joy, int btn) { joysticks[joy].buttons[btn] = 0; };
+
+            int getHat(int idJoystick, int idHat) { return joysticks[idJoystick].hats[idHat]; }
+            int getButton(int idJoystick, int idButton) { return joysticks[idJoystick].buttons[idButton]; }
+            char& getKey(int i) { return key[i]; }
+            int getMouseX(){ return mouseX; }
+            int getMouseY(){ return mouseY; }
+            int getMouseXRel(){ return mouseXRel; }
+            int getMouseYRel(){ return mouseYRel; }
+            int getMouseButton(int i){ return mouseButtons[i]; }
+            int getQuit(){ return quit; }
+            void setQuit(int i){this->quit = i; }
+            int getNbJoysticks() { return nbJoysticks; }
 };
 
 class TileSet
@@ -297,7 +321,8 @@ class Animation
         
     public:
         Animation();
-        Animation(char*, int);
+        Animation(string, int);
+        Animation(const Animation&);
         ~Animation();
         void nextFrame();
         void render(SDL_Surface*);
@@ -355,6 +380,12 @@ class Game
                 void updateBomb( int );
                 void updateExplosion( int );
                 void killPlayer(int);
+                
+                void doMoveUp(Player*);
+                void doMoveDown(Player*);
+                void doMoveRight(Player*);
+                void doMoveLeft(Player*);
+                void doDropBomb(Player*);
 };
 
 #endif // CLASSES_H_INCLUDED

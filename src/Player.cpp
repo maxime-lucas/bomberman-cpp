@@ -2,6 +2,7 @@
 
 Player::Player() : Shape()
 {
+    cout << "passe-const" << endl;
 	this->direction = SOUTH;
 
 	this->xVel = 0;
@@ -9,12 +10,12 @@ Player::Player() : Shape()
 
 	this->speed = DEFAULT_SPEED;
 
-	this->nbBomb = 10;
+	this->nbBomb = 100;
         if( DEBUG_MODE )
             this->nbBomb += 100;
         
 	this->sprite = IMG_Load("img/sprites/player1.png"); /*chargement de l'image du personnage*/
-	this->nbSprites = 6; /*nb d'images pour l'animation du perso*/
+        this->nbSprites = 6; /*nb d'images pour l'animation du perso*/
 
 	this->dimCoordSprite.w = 40; /*largeur d'une image de l'animation*/
 	this->dimCoordSprite.h = 67; /*hauteur d'une image de l'animation*/
@@ -29,6 +30,39 @@ Player::Player(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb)
 
 Player::~Player()
 {
+    Player* p = &this;
+    cout << "Destructeur : " << p << endl;
+}
+
+Player& Player::operator=( const Player& p )
+{
+    if ( this != &p )
+    {
+        SDL_FreeSurface(sprite);
+        sprite = p.sprite;
+        
+        xVel = p.xVel;
+        yVel = p.yVel;
+	speed = p.speed;
+	direction = p.direction;
+	box.x = p.box.x;
+        box.y = p.box.y;
+        box.w = p.box.w;
+        box.h = p.box.h;
+	nbBomb = p.nbBomb;
+        alive = p.alive;
+        dimCoordSprite.x = p.dimCoordSprite.x;
+        dimCoordSprite.y = p.dimCoordSprite.y;
+        dimCoordSprite.w = p.dimCoordSprite.w;
+        dimCoordSprite.h = p.dimCoordSprite.h;
+	dimCoordEcran.x = p.dimCoordEcran.x;
+        dimCoordEcran.y = p.dimCoordEcran.y;
+        dimCoordEcran.w = p.dimCoordEcran.w;
+        dimCoordEcran.h = p.dimCoordEcran.h;
+        nbSprites = p.nbSprites;
+        
+    }
+    return (* this ) ;
 }
 
 void Player::show(SDL_Surface *dest)

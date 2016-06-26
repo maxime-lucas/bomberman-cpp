@@ -1,6 +1,6 @@
 #include "Header.h"
 
-// Fonction pour g�rer affichage
+// Fonction pour gérer affichage
 void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect* clip = NULL )
 {
     SDL_Rect offset;
@@ -12,137 +12,21 @@ void apply_surface( int x, int y, SDL_Surface* src, SDL_Surface* dest, SDL_Rect*
     SDL_BlitSurface( src, clip, dest, &offset );
 }
 
-void menu(SDL_Surface *ecran)
-{
-    // Vars
-    SDL_Surface *fondIMG ,*logoIMG ,*buttonStartIMG, *buttonQuitIMG;
-    SDL_Rect dimCoordSprite;
-
-    // Pr�paration du Timer pour les animations
-    Timer fps;
-
-    // Pr�paration de l'objet permettant de g�rer les �v�nements
-    Input in;
-
-    // Chargement des images
-    buttonStartIMG = IMG_Load("img/start-screen/start-button.png");
-    buttonQuitIMG = IMG_Load("img/start-screen/quit-button.png");
-    fondIMG = IMG_Load("img/start-screen/start.png");
-    logoIMG = IMG_Load("img/start-screen/intro/42.png");
-
-    // Pr�paration de la structure pour les boutons
-    dimCoordSprite.x = 0;
-    dimCoordSprite.y = 0;
-    dimCoordSprite.w = 147;
-    dimCoordSprite.h = 48;
-
-    // Instanciation des boutons
-    Button *start = new Button(buttonStartIMG ,dimCoordSprite, 2);
-    Button *quit = new Button(buttonQuitIMG , dimCoordSprite, 2);
-
-    // Positionnement des boutons sur l'�cran
-    start->setDimCoordEcranX(260);
-    start->setDimCoordEcranY(570);
-    quit->setDimCoordEcranX(440);
-    quit->setDimCoordEcranY(570);
-
-    
-    apply_surface(0,0,fondIMG, ecran);
-    apply_surface(0,0,logoIMG, ecran);
-
-    // Affichage des boutons
-    start->show(ecran);
-    quit->show(ecran);
-    SDL_Flip(ecran);
-
-    // Gestion du survol des boutons
-    while(!in.getQuit())
-    {
-        in.Update();
-
-        // Survol du bouton PLAY
-        if( start->isHovered( in.getMouseX(), in.getMouseY() ) )
-        {
-            start->setHovered();
-            start->show(ecran);
-            SDL_Flip(ecran);
-        }
-        else
-        {
-            start->unsetHovered();
-            start->show(ecran);
-            SDL_Flip(ecran);
-        }
-
-        // Survol du bouton QUIT
-        if( quit->isHovered( in.getMouseX(), in.getMouseY() ) )
-        {
-            quit->setHovered();
-            quit->show(ecran);
-            SDL_Flip(ecran);
-        }
-        else
-        {
-            quit->unsetHovered();
-            quit->show(ecran);
-            SDL_Flip(ecran);
-        }
-
-
-        // Clic de la souris
-        if (in.getMouseButton(SDL_BUTTON_LEFT) )
-        {
-            // Clic du bouton PLAY
-            if( start->isHovered( in.getMouseX(), in.getMouseY() ) )
-            {
-                // Nettoyage
-                SDL_FreeSurface(buttonStartIMG);
-                SDL_FreeSurface(buttonQuitIMG);
-                SDL_FreeSurface(fondIMG);
-                SDL_FreeSurface(logoIMG);
-
-                // Reset de l'�cran
-                SDL_FillRect(ecran , NULL, SDL_MapRGB(ecran->format , 0,0,0));
-                SDL_Flip(ecran);
-
-                // Lancement du jeu
-                play(ecran);
-
-                // Fin de la boucle
-                in.setQuit(1);
-            }
-
-            // Clic du bouton QUIT
-            if( quit->isHovered( in.getMouseX(), in.getMouseY() ) )
-            {
-                // Nettoyage
-                SDL_FreeSurface(buttonStartIMG);
-                SDL_FreeSurface(buttonQuitIMG);
-                SDL_FreeSurface(fondIMG);
-                SDL_FreeSurface(logoIMG);
-
-                // Fin de la boucle
-                in.setQuit(1);
-            }
-        }
-    }
-}
-
 bool checkCollision( SDL_Rect a, SDL_Rect b )
 {
-    // Les c�t�s des rectangles
+    // Les côtes des rectangles
     int leftA, leftB;
     int rightA, rightB;
     int topA, topB;
     int bottomA, bottomB;
 
-    // C�tes de A
+    // Côtes de A
     leftA = a.x;
     rightA = a.x + a.w;
     topA = a.y;
     bottomA = a.y + a.h;
 
-    // C�tes de B
+    // Côtes de B
     leftB = b.x;
     rightB = b.x + b.w;
     topB = b.y;
@@ -173,52 +57,96 @@ bool checkCollision( SDL_Rect a, SDL_Rect b )
 
 void init(SDL_Surface** s)
 {
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_EVERYTHING);
 	*s = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	SDL_WM_SetCaption("Bomberman", NULL);
 }
 
-void play(SDL_Surface * ecran)
+void playIntro(SDL_Surface* ecran) {
+    Timer fps;
+    string path = "img/animations/intro/%d.png";
+    Animation *intro = new Animation(path, 90);
+    for(int i = 0; i <  intro->getNbFrames() ; i++)
+    {
+        fps.start();
+
+        intro->render(ecran);
+        intro->nextFrame();
+        SDL_Flip(ecran);
+
+        while( fps.get_ticks() < 1000 / FRAMES_PER_SECOND ) {}
+        fps.stop();
+    }
+}
+
+void playStage1(SDL_Surface* ecran) {
+    Timer fps;
+    string path = "img/animations/stage1/%d.png";
+    
+    Animation *stage1 = new Animation(path, 42);
+    for(int i = 0; i <  stage1->getNbFrames() ; i++)
+    {
+        fps.start();
+
+        stage1->render(ecran);
+        stage1->nextFrame();
+        SDL_Flip(ecran);
+
+        while( fps.get_ticks() < 1000 / FRAMES_PER_SECOND ) {}
+        fps.stop();
+    }
+}
+
+void playGame(SDL_Surface * ecran)
 {
-    // Objet pour g�rer les �v�nements
-	Input in;
-	// Instanciation des joueurs
-	Player p1,p2,p3;
-	p2.setSprite(IMG_Load("img/sprites/player2.png"));
-	Player players[NB_PLAYERS] = { (Player) p1, (Player) p2, (Player) p3};
+    // Objet pour gérer les évènements
+    Input in;
+    SDL_JoystickEventState(SDL_ENABLE);
+        
+    // Instanciation des joueurs
+    Player* players = NULL;
+    players = (Player*) malloc ( NB_PLAYERS * sizeof(Player) );
+    for(int i = 0 ; i < NB_PLAYERS ; i++ )
+    {
+        Player* p = new Player();
+        players[i] = *p;
+    }
+    
 
-	// Instanciation du jeu
-	Game *g = new Game( ecran, players);
-	g->setupGame();
+    // Instanciation du jeu
+    Game *g = new Game( ecran, players);
+    g->setupGame();
 
-	// Variables temporelles
-	double previous = SDL_GetTicks();
-	double lag = 0.0;
+    
+    // Variables temporelles
+    double previous = SDL_GetTicks();
+    double lag = 0.0;
 
-	while( !in.getQuit() && !in.getKey(SDLK_ESCAPE) )
-	{
-		// Calcul du lag
-		int i = 0;
-		double current = SDL_GetTicks();
-		double elapsed = current - previous;
-		previous = current;
-		lag += elapsed;
+    while( !in.getQuit() && !in.getKey(SDLK_ESCAPE)  && !(in.getNbJoysticks() > 0 && in.getButton(0,7)) )
+    {
+        // Calcul du lag
+        int i = 0;
+        double current = SDL_GetTicks();
+        double elapsed = current - previous;
+        previous = current;
+        lag += elapsed;
 
-		// Mise � jour des �v�nements
-		in.Update();
 
-		// Evolution du jeu, en fonction du lag
-		while (lag >= MS_PER_UPDATE)
-		{
-			g->evolue(in);
-			i++;
-			lag -= MS_PER_UPDATE;
-                }
+        // Mise � jour des �v�nements
+        in.update();
 
-		// G�n�ration de la map
-		g->render();
-		g->flip();
-	}
+        // Evolution du jeu, en fonction du lag
+        while (lag >= MS_PER_UPDATE)
+        {
+            g->evolue(in);
+            i++;
+            lag -= MS_PER_UPDATE;
+        }
+
+        // G�n�ration de la map
+        g->render();
+        g->flip();
+    }
 }
 
 vector<int> parseStageFile(string filePath)

@@ -5,7 +5,9 @@
 	void start_screen(SDL_Surface *ecran);
 	void init(SDL_Surface**);
 	bool checkCollision( SDL_Rect, SDL_Rect);
-	void play(SDL_Surface*);
+	void playGame(SDL_Surface*);
+        void playIntro(SDL_Surface*);
+        void playStage1(SDL_Surface*);
 	void menu(SDL_Surface*);
         vector<int> parseStageFile(string);
 

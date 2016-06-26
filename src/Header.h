@@ -29,8 +29,8 @@ using namespace std;
     const int DEFAULT_SPEED = 300;
 
     // Nombre d'images devant s'afficher par seconde
-    const int FRAMES_PER_SECOND = 30;
-    const int MS_PER_UPDATE = 40;
+    const int FRAMES_PER_SECOND = 40;
+    const int MS_PER_UPDATE = 30;
 
     // Constantes pour les tuiles
     const int TILE_WIDTH = 50;
@@ -44,7 +44,7 @@ using namespace std;
     const int TILE_WOOD = 3;
 
     // Constantes pour le jeu
-    const int NB_PLAYERS = 3;
+    const int NB_PLAYERS = 2;
     const int SPAWN_PLAYERS[4][2] = 
     { 
             {1,1}, 
@@ -54,7 +54,7 @@ using namespace std;
     };
     
     // Constantes pour la config
-    const int DEBUG_MODE = 0;
+    const int DEBUG_MODE = 1;
 
     #include "Classes.h"
     #include "Functions.h"

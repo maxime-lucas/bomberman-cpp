@@ -1,0 +1,79 @@
+\documentclass[a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel} 
+\usepackage{datetime}
+\usepackage{geometry}
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\geometry{hmargin=1.5cm,vmargin=1.7cm}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\contentsname}{Table des matières}
+\lstset{%
+	float=hbp,basicstyle=\footnotesize\ttfamily\color{black},%
+	columns=fixed,tabsize=4,frame=single,%
+	showspaces=false,showstringspaces=false,numbers=left,%
+	numberstyle=\tiny\ttfamily\color{black},%
+	breaklines=true, breakindent=3em, breakautoindent=true,%
+	captionpos=t,xleftmargin=-1em,xrightmargin=-1em,lineskip=0pt,%
+	numbersep=1em,backgroundcolor=\color{white},%
+	keywordstyle=\bfseries\color{blue},%
+	literate=%
+         {à}{{\`a}}1
+         {í}{{\'i}}1
+         {î}{{\^i}}1
+         {é}{{\'e}}1
+         {è}{{\`e}}1
+         {ê}{{\^e}}1
+}
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		\vspace*{10cm}
+	
+		\textbf{\Huge Réalisation d'un Bomberman}
+		
+		\vspace{0.5cm}
+		\LARGE{Projet Tutoré de Programmation Orientée Objet}
+		
+		\vspace{1.5cm}
+		\textbf{Kevin CHIDIAC et Maxime LUCAS}
+		
+		\vfill
+		
+		\today	
+	\end{center}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+
+
+\begin{center}
+\section{Préface}
+\end{center}
+
+\subsection{Introduction}
+Hello World !\\
+Ne vous êtes-vous jamais demandé comment les jeux étaient développés ?\\
+Lorsque vous étiez petit, n’avez-vous jamais aspiré à réaliser un jeu vidéo ?\\
+Pourtant, c’est bien ce rêve enfantin que nous avons réalisé pendant 4 semaines.\\
+Bienvenue dans notre rapport de cette expérience des plus formatrices.\\
+Cet ouvrage a pour but de vous expliquer le raisonnement et la démarche de réalisation que nous avons empruntée pour aboutir à un tel résultat.
+
+\subsection{Problématique}
+Tout d’abord, la problématique originale est la suivante :\\
+Il nous faut développer une esquisse du célèbre jeu Bomberman, dans le langage orienté
+objet C++. Ainsi, nous devons fédérer un ensemble de classes, répondant au mieux aux
+exigences d’un tel sujet, et respectant évidemment les principes mêmes de la programmation orientée objet, à savoir : l’encapsulation, l’héritage, la composition, le
+polymorphisme, etc...\\
+De plus, il est conseillé d’utiliser la bibliothèque graphique Allegro, disposant d’une
+documentation conséquente, bien que vieillissante.\\
+Enfin, concernant les limites du sujet, pour rentrer dans le cahier des charges, il nous
+faut gérer l’affichage du labyrinthe, le déplacement du personnage à travers ce dernier,
+détecter les collisions du protagoniste avec les blocs environnants, et en induire l’impact sur son déplacement.\\
+
+\end{document}
