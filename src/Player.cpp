@@ -2,26 +2,28 @@
 
 Player::Player() : Shape()
 {
-	this->direction = SOUTH;
+    cout << "Constructeur Player" << endl;
+    
+    this->direction = SOUTH;
 
-	this->xVel = 0;
-	this->yVel = 0;
+    this->xVel = 0;
+    this->yVel = 0;
 
-	this->speed = DEFAULT_SPEED;
+    this->speed = DEFAULT_SPEED;
 
-	this->nbBomb = 10;
-        if( DEBUG_MODE )
-            this->nbBomb += 100;
-        
-	this->sprite = IMG_Load("img/sprites/player1.png"); /*chargement de l'image du personnage*/
-	this->nbSprites = 6; /*nb d'images pour l'animation du perso*/
+    this->nbBomb = 100;
+    if( DEBUG_MODE )
+        this->nbBomb += 100;
 
-	this->dimCoordSprite.w = 40; /*largeur d'une image de l'animation*/
-	this->dimCoordSprite.h = 67; /*hauteur d'une image de l'animation*/
-	this->dimCoordSprite.x = 0; /*coordonnée x d'affichage à l'écran de départ*/
-	this->dimCoordSprite.y = this->direction * this->dimCoordSprite.h; /*coordonnée y de départ*/
-        
-        this->alive = true;
+    this->sprite = IMG_Load("img/sprites/player1.png"); 
+    this->nbSprites = 6; 
+
+    this->dimCoordSprite.w = 40;
+    this->dimCoordSprite.h = 67;
+    this->dimCoordSprite.x = 0;
+    this->dimCoordSprite.y = this->direction * this->dimCoordSprite.h;
+
+    this->alive = true;
 }
 
 Player::Player(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb)
@@ -29,6 +31,38 @@ Player::Player(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb)
 
 Player::~Player()
 {
+    cout << "Destructeur Player" << endl;
+}
+
+Player& Player::operator=( const Player& p )
+{
+    if ( this != &p )
+    {
+        SDL_FreeSurface(sprite);
+        sprite = p.sprite;
+        
+        xVel = p.xVel;
+        yVel = p.yVel;
+	speed = p.speed;
+	direction = p.direction;
+	box.x = p.box.x;
+        box.y = p.box.y;
+        box.w = p.box.w;
+        box.h = p.box.h;
+	nbBomb = p.nbBomb;
+        alive = p.alive;
+        dimCoordSprite.x = p.dimCoordSprite.x;
+        dimCoordSprite.y = p.dimCoordSprite.y;
+        dimCoordSprite.w = p.dimCoordSprite.w;
+        dimCoordSprite.h = p.dimCoordSprite.h;
+	dimCoordEcran.x = p.dimCoordEcran.x;
+        dimCoordEcran.y = p.dimCoordEcran.y;
+        dimCoordEcran.w = p.dimCoordEcran.w;
+        dimCoordEcran.h = p.dimCoordEcran.h;
+        nbSprites = p.nbSprites;
+        
+    }
+    return (* this ) ;
 }
 
 void Player::show(SDL_Surface *dest)

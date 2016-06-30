@@ -2,14 +2,16 @@
 
 Game::Game(SDL_Surface *ecran, Player players[])
 {
+    cout << "Game:Constructor:Begin" << endl;
     this->ecran = ecran;
     
     tileSet = new TileSet();
 
    for(int i = 0; i < NB_PLAYERS; i++)
     {
-        Player *p = &players[i];
-        mapPlayers.push_back(p);
+        Player p = players[i];
+        mapPlayers.push_back(&p);
+        cout << "Player >> mapPlayers" << endl;
     }
     
     nbPlayersAlive = NB_PLAYERS;
@@ -18,6 +20,8 @@ Game::Game(SDL_Surface *ecran, Player players[])
     
     endOfGame = false;
     endOfAnimation = false;
+    
+    cout << "Game:Constructor:End" << endl;
 }
 
 void Game::setupGame()

@@ -69,6 +69,7 @@ void playIntro(SDL_Surface* ecran) {
     for(int i = 0; i <  intro->getNbFrames() ; i++)
     {
         fps.start();
+        
         intro->render(ecran);
         intro->nextFrame();
         SDL_Flip(ecran);
