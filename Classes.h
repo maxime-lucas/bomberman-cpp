@@ -246,57 +246,6 @@ protected:
     int dateOfExplosion;
 };
 
-class ExplosionMap
-{
-protected :
-    std::vector<Explosion*> tab;
-    
-public :
-    ExplosionMap();
-    ~ExplosionMap();
-    
-    std::vector<Explosion*> getTab() const { return tab; }
-    void draw(SDL_Surface*);
-};
-
-class PlayerMap
-{
-protected :
-    std::vector<Player*> tab;
-public :
-    PlayerMap();
-    ~PlayerMap();
-    
-    std::vector<Player*> getTab() { return tab; }
-    void draw(SDL_Surface*);
-};
-
-class TileMap
-{
-protected :
-    std::vector<Tile*> tab;
-    
-public :
-    TileMap();
-    ~TileMap();
-    
-    std::vector<Tile*> getTab() const { return tab; }
-    void draw(TileSet*, SDL_Surface*);
-};
-
-class BombMap
-{
-protected :
-    std::vector<Bomb*> tab;
-    
-public :
-    BombMap();
-    ~BombMap();
-    
-    std::vector<Bomb*> getTab() const { return tab; }
-    void draw(SDL_Surface*);
-};
-
 class Animation
 {
 protected:
