@@ -104,13 +104,15 @@ void playGame(SDL_Surface * ecran)
     SDL_JoystickEventState(SDL_ENABLE);
         
     // Instanciation des joueurs
-    Player* players = NULL;
+    /*Player* players = NULL;
     players = (Player*) malloc ( NB_PLAYERS * sizeof(Player) );
     for(int i = 0 ; i < NB_PLAYERS ; i++ )
     {
         Player* p = new Player();
         players[i] = *p;
-    }
+    }*/
+    Player p1,p2;
+    Player players[] = {(Player) p1, (Player) p2 };
     
 
     // Instanciation du jeu
@@ -131,10 +133,10 @@ void playGame(SDL_Surface * ecran)
         previous = current;
         lag += elapsed;
 
-
         // Mise � jour des �v�nements
         in.update();
-
+        
+        /*
         // Evolution du jeu, en fonction du lag
         while (lag >= MS_PER_UPDATE)
         {
@@ -146,6 +148,7 @@ void playGame(SDL_Surface * ecran)
         // G�n�ration de la map
         g->render();
         g->flip();
+        */
     }
 }
 

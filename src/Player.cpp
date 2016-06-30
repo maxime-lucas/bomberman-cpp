@@ -2,27 +2,28 @@
 
 Player::Player() : Shape()
 {
-    cout << "passe-const" << endl;
-	this->direction = SOUTH;
+    cout << "Constructeur Player" << endl;
+    
+    this->direction = SOUTH;
 
-	this->xVel = 0;
-	this->yVel = 0;
+    this->xVel = 0;
+    this->yVel = 0;
 
-	this->speed = DEFAULT_SPEED;
+    this->speed = DEFAULT_SPEED;
 
-	this->nbBomb = 100;
-        if( DEBUG_MODE )
-            this->nbBomb += 100;
-        
-	this->sprite = IMG_Load("img/sprites/player1.png"); /*chargement de l'image du personnage*/
-        this->nbSprites = 6; /*nb d'images pour l'animation du perso*/
+    this->nbBomb = 100;
+    if( DEBUG_MODE )
+        this->nbBomb += 100;
 
-	this->dimCoordSprite.w = 40; /*largeur d'une image de l'animation*/
-	this->dimCoordSprite.h = 67; /*hauteur d'une image de l'animation*/
-	this->dimCoordSprite.x = 0; /*coordonnée x d'affichage à l'écran de départ*/
-	this->dimCoordSprite.y = this->direction * this->dimCoordSprite.h; /*coordonnée y de départ*/
-        
-        this->alive = true;
+    this->sprite = IMG_Load("img/sprites/player1.png"); 
+    this->nbSprites = 6; 
+
+    this->dimCoordSprite.w = 40;
+    this->dimCoordSprite.h = 67;
+    this->dimCoordSprite.x = 0;
+    this->dimCoordSprite.y = this->direction * this->dimCoordSprite.h;
+
+    this->alive = true;
 }
 
 Player::Player(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb)
@@ -30,8 +31,7 @@ Player::Player(SDL_Surface* s, SDL_Rect r , int nb) : Shape(s,r,nb)
 
 Player::~Player()
 {
-    Player* p = &this;
-    cout << "Destructeur : " << p << endl;
+    cout << "Destructeur Player" << endl;
 }
 
 Player& Player::operator=( const Player& p )

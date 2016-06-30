@@ -56,7 +56,7 @@ class Player : public Shape
 	public:
             Player();
             Player(SDL_Surface* , SDL_Rect , int);
-            ~Player();
+            virtual ~Player();
             Player& operator=(const Player&);
             void show(SDL_Surface*);
 
