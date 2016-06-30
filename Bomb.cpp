@@ -11,8 +11,8 @@ Bomb::Bomb() : Shape()
 	this->dimCoordSprite.x = 0; /*coordonn�e x d'affichage � l'�cran de d�part*/
 	this->dimCoordSprite.y = 0; /*coordonn�e y de d�part*/
 
-        this->dimCoordEcran.w = dimCoordSprite.w;
-        this->dimCoordEcran.h = dimCoordSprite.h;
+        this->dimCoordScreen.w = dimCoordSprite.w;
+        this->dimCoordScreen.h = dimCoordSprite.h;
         
 	this->step = 1;
 	this->delay = 2000;
@@ -28,11 +28,11 @@ void Bomb::show(SDL_Surface * dest)
     if( DEBUG_MODE )
     {
         SDL_Surface *s;
-        s = SDL_CreateRGBSurface(0,dimCoordEcran.w , dimCoordEcran.h , SCREEN_BPP, 0,255,255,0);
-        apply_surface(dimCoordEcran.x , dimCoordEcran.y , s, dest, NULL );   
+        s = SDL_CreateRGBSurface(0,dimCoordScreen.w , dimCoordScreen.h , SCREEN_BPP, 0,255,255,0);
+        apply_surface(dimCoordScreen.x , dimCoordScreen.y , s, dest, NULL );   
     }
     
-    apply_surface(dimCoordEcran.x , dimCoordEcran.y , sprite, dest ,&dimCoordSprite);
+    apply_surface(dimCoordScreen.x , dimCoordScreen.y , sprite, dest ,&dimCoordSprite);
     
     
 }

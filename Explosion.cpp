@@ -10,8 +10,8 @@ Explosion::Explosion(int x, int y) : Shape()
     this->dimCoordSprite.x = 100; /*coordonnée x d'affichage à l'écran de départ*/
     this->dimCoordSprite.y = 100; /*coordonnée y de départ*/
 
-    this->dimCoordEcran.x = x;
-    this->dimCoordEcran.y = y;
+    this->dimCoordScreen.x = x;
+    this->dimCoordScreen.y = y;
  
     this->step = 1;
     this->strength = 3;
@@ -86,8 +86,8 @@ void Explosion::evolueUp()
 	{
 		SDL_Rect newBox;
 		
-		newBox.x = dimCoordEcran.x ;
-		newBox.y = dimCoordEcran.y - ( step - 1 ) * TILE_HEIGHT ;
+		newBox.x = dimCoordScreen.x ;
+		newBox.y = dimCoordScreen.y - ( step - 1 ) * TILE_HEIGHT ;
 		newBox.w = TILE_WIDTH;
 		newBox.h = TILE_HEIGHT;
                 
@@ -100,8 +100,8 @@ void Explosion::evolueDown()
 	if( step != 1 )
 	{
 		SDL_Rect newBox;
-		newBox.x = dimCoordEcran.x ;
-		newBox.y = dimCoordEcran.y + ( step - 1 ) * TILE_HEIGHT ;
+		newBox.x = dimCoordScreen.x ;
+		newBox.y = dimCoordScreen.y + ( step - 1 ) * TILE_HEIGHT ;
                 newBox.w = TILE_WIDTH;
 		newBox.h = TILE_HEIGHT;
                 
@@ -114,8 +114,8 @@ void Explosion::evolueLeft()
 	if( step != 1 )
 	{
 		SDL_Rect newBox;
-		newBox.x = dimCoordEcran.x - ( step - 1 ) * TILE_WIDTH ;
-		newBox.y = dimCoordEcran.y ;
+		newBox.x = dimCoordScreen.x - ( step - 1 ) * TILE_WIDTH ;
+		newBox.y = dimCoordScreen.y ;
                 newBox.w = TILE_WIDTH;
 		newBox.h = TILE_HEIGHT;
                 
@@ -128,8 +128,8 @@ void Explosion::evolueRight()
 	if( step != 1 )
 	{
 		SDL_Rect newBox;
-		newBox.x = dimCoordEcran.x + ( step - 1 ) * TILE_WIDTH ;
-		newBox.y = dimCoordEcran.y ;
+		newBox.x = dimCoordScreen.x + ( step - 1 ) * TILE_WIDTH ;
+		newBox.y = dimCoordScreen.y ;
                 
                 collisionBoxes.push_back(newBox);
 	}

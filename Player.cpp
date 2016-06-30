@@ -40,7 +40,7 @@ void Player::show(SDL_Surface *dest)
         apply_surface(box.x , box.y , s, dest, NULL );   
     }
     
-    apply_surface(dimCoordEcran.x , dimCoordEcran.y , sprite, dest ,&dimCoordSprite);
+    apply_surface(dimCoordScreen.x , dimCoordScreen.y , sprite, dest ,&dimCoordSprite);
     
     
     
@@ -50,7 +50,7 @@ void Player::MoveUp()
 {
     direction = NORTH;
     updateSprite();
-    dimCoordEcran.y -= yVel;
+    dimCoordScreen.y -= yVel;
     updateBox();
 }
 
@@ -58,7 +58,7 @@ void Player::MoveDown()
 {
     direction = SOUTH;
     updateSprite();
-    dimCoordEcran.y += yVel;
+    dimCoordScreen.y += yVel;
     updateBox();
 }
 
@@ -66,7 +66,7 @@ void Player::MoveLeft()
 {
     direction = WEST;
     updateSprite();
-    dimCoordEcran.x -= xVel;
+    dimCoordScreen.x -= xVel;
     updateBox();
 }
 
@@ -74,7 +74,7 @@ void Player::MoveRight()
 {
     direction = EAST;
     updateSprite();
-    dimCoordEcran.x += xVel;
+    dimCoordScreen.x += xVel;
     updateBox();
 }
 
@@ -94,8 +94,8 @@ void Player::resetSprite()
 
 void Player::updateBox()
 {
-	this->box.x = this->dimCoordEcran.x;
-	this->box.y = this->dimCoordEcran.y + TILE_HEIGHT - 10;
+	this->box.x = this->dimCoordScreen.x;
+	this->box.y = this->dimCoordScreen.y + TILE_HEIGHT - 10;
 	this->box.w = this->dimCoordSprite.w;
 	this->box.h = this->dimCoordSprite.h - TILE_HEIGHT + 10;
 }

@@ -95,12 +95,12 @@ void Game::setupGame()
 	{
             // Récupération du joueur i
             Player *p = mapPlayers[i];
-            p->setDimCoordEcranX(TILE_WIDTH* SPAWN_PLAYERS[i][0]);
+            p->setDimCoordScreenX(TILE_WIDTH* SPAWN_PLAYERS[i][0]);
 
             if(i <= 1)
-                p->setDimCoordEcranY(20);
+                p->setDimCoordScreenY(20);
             else
-                p->setDimCoordEcranY( TILE_HEIGHT*SPAWN_PLAYERS[i][1] - ( p->getDimCoordSpriteH() - TILE_HEIGHT ) - 3 );
+                p->setDimCoordScreenY( TILE_HEIGHT*SPAWN_PLAYERS[i][1] - ( p->getDimCoordSpriteH() - TILE_HEIGHT ) - 3 );
             
             // Pour pallier à un problème d'initialisation de collisionsBoxes, on les déplace manuellement, pour que les boxes se placent automatiquement
             p->MoveUp();
@@ -127,7 +127,7 @@ void Game::doMoveUp(Player *p) {
 
     if( touchesTile(p->getBox(), mapWalls) )
     {
-        p->setDimCoordEcranY(p->getDimCoordEcranY() + p->getYvel() );
+        p->setDimCoordScreenY(p->getDimCoordScreenY() + p->getYvel() );
     }
 }
 
@@ -137,7 +137,7 @@ void Game::doMoveRight(Player *p) {
 
     if(touchesTile(p->getBox(), mapWalls) )
     {
-        p->setDimCoordEcranX(p->getDimCoordEcranX() - p->getXvel() );
+        p->setDimCoordScreenX(p->getDimCoordScreenX() - p->getXvel() );
     }
 }
 
@@ -147,7 +147,7 @@ void Game::doMoveLeft(Player *p) {
 
     if(touchesTile(p->getBox(), mapWalls) )
     {
-        p->setDimCoordEcranX(p->getDimCoordEcranX() + p->getXvel() );
+        p->setDimCoordScreenX(p->getDimCoordScreenX() + p->getXvel() );
     }
 }
 
@@ -157,7 +157,7 @@ void Game::doMoveDown(Player *p) {
 
     if(touchesTile(p->getBox(), mapWalls) )
     {
-        p->setDimCoordEcranY(p->getDimCoordEcranY() - p->getYvel() );
+        p->setDimCoordScreenY(p->getDimCoordScreenY() - p->getYvel() );
     }
 }
 
@@ -169,13 +169,13 @@ void Game::doDropBomb(Player *p) {
         Bomb *b = new Bomb();
 
         // Placement de la bombe aux coordonnées du joueur qui l'a posé
-        int x = p->getDimCoordEcranX();
-        int y = p->getDimCoordEcranY() + p->getDimCoordSpriteH();
+        int x = p->getDimCoordScreenX();
+        int y = p->getDimCoordScreenY() + p->getDimCoordSpriteH();
         x = x - x % TILE_WIDTH;
         y = y - y % TILE_HEIGHT;
 
-        b->setDimCoordEcranX(x);
-        b->setDimCoordEcranY(y);
+        b->setDimCoordScreenX(x);
+        b->setDimCoordScreenY(y);
 
         // Décrémentation du nombre de bombes du joueur qui l'a posé
         p->dropBomb();
@@ -427,7 +427,7 @@ bool Game::touchesBomb( SDL_Rect box, std::vector<Bomb*> bm )
     for( int i = 0; i < bm.size() ; i++ )
     {
         Bomb *b = bm[i];
-        if( checkCollision( box, b->getDimCoordEcran() ) )
+        if( checkCollision( box, b->getDimCoordScreen() ) )
         {
             return true;
         }
@@ -478,15 +478,15 @@ void Game::evolueExplosion(int i)
         int direction;
         SDL_Rect box = e->getCollisionBoxes()[i];
         
-        if( box.x == e->getDimCoordEcranX() && box.y == e->getDimCoordEcranY() )
+        if( box.x == e->getDimCoordScreenX() && box.y == e->getDimCoordScreenY() )
             direction = 4;
-        else if( box.x > e->getDimCoordEcranX() )
+        else if( box.x > e->getDimCoordScreenX() )
             direction = EAST;
-        else if( box.x < e->getDimCoordEcranX() )
+        else if( box.x < e->getDimCoordScreenX() )
             direction = WEST;
-        else if( box.y > e->getDimCoordEcranY() )
+        else if( box.y > e->getDimCoordScreenY() )
             direction = SOUTH;
-        else if( box.y <= e->getDimCoordEcranY() )
+        else if( box.y <= e->getDimCoordScreenY() )
             direction = NORTH;
             
         SDL_Rect tempBoxUp, tempBoxLeft, tempBoxRight, tempBoxDown;
@@ -620,8 +620,8 @@ void Game::updateBomb( int i)
     if( ( b->getStep() == 3 ) )
     {			
         // Placement de l'explosion
-        int x = b->getDimCoordEcranX();
-        int y = b->getDimCoordEcranY();
+        int x = b->getDimCoordScreenX();
+        int y = b->getDimCoordScreenY();
 
         // Création d'une explosion à la place
         Explosion *e = new Explosion(x,y);

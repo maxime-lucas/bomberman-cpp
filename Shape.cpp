@@ -1,9 +1,9 @@
 #include "Header.h"
 
-Shape::Shape() /*constructeur par défaut*/
+Shape::Shape() /*constructeur par dï¿½faut*/
 {
-    this->dimCoordEcran.x = 0; /*position d'affichage X dans écran*/
-    this->dimCoordEcran.y = 0; /*position d'affichage Y dans écran*/
+    this->dimCoordScreen.x = 0; /*position d'affichage X dans ï¿½cran*/
+    this->dimCoordScreen.y = 0; /*position d'affichage Y dans ï¿½cran*/
     this->sprite = NULL; /*image de la Shape, ici NULL*/
     this->nbSprites = 1; /*nb d'images pour animation , ici 1 seule*/
 }
@@ -12,24 +12,24 @@ Shape::~Shape() /*destructeur*/
 {
 }
 
-Shape::Shape(SDL_Surface* s, SDL_Rect r , int nb) /*constructeur paramétré*/
+Shape::Shape(SDL_Surface* s, SDL_Rect r , int nb) /*constructeur paramï¿½trï¿½*/
 {
-    this->sprite = s; /*image passée en paramètre*/
-    this->dimCoordSprite = r; /*coordonnées et taille image dans sprite, passé en paramètres*/
+    this->sprite = s; /*image passï¿½e en paramï¿½tre*/
+    this->dimCoordSprite = r; /*coordonnï¿½es et taille image dans sprite, passï¿½ en paramï¿½tres*/
     this->nbSprites = nb; /*nb d'iamges pour l'animation dans le sprite*/
 
-    this->dimCoordEcran.x = 0; /*coordonnées d'affichage dans l'écran*/
-    this->dimCoordEcran.y = 0;
+    this->dimCoordScreen.x = 0; /*coordonnï¿½es d'affichage dans l'ï¿½cran*/
+    this->dimCoordScreen.y = 0;
 }
 
-void Shape::setDimCoordEcranX(int x) { this->dimCoordEcran.x = x; }
-void Shape::setDimCoordEcranY(int y){ this->dimCoordEcran.y = y; }
-void Shape::setDimCoordEcranW(int w) { this->dimCoordEcran.w = w; }
-void Shape::setDimCoordEcranH(int h){ this->dimCoordEcran.h = h; }
-int Shape::getDimCoordEcranX() { return this->dimCoordEcran.x; }
-int Shape::getDimCoordEcranY() { return this->dimCoordEcran.y; }
-int Shape::getDimCoordEcranW() { return this->dimCoordEcran.w; }
-int Shape::getDimCoordEcranH() { return this->dimCoordEcran.h; }
+void Shape::setDimCoordScreenX(int x) { this->dimCoordScreen.x = x; }
+void Shape::setDimCoordScreenY(int y){ this->dimCoordScreen.y = y; }
+void Shape::setDimCoordScreenW(int w) { this->dimCoordScreen.w = w; }
+void Shape::setDimCoordScreenH(int h){ this->dimCoordScreen.h = h; }
+int Shape::getDimCoordScreenX() { return this->dimCoordScreen.x; }
+int Shape::getDimCoordScreenY() { return this->dimCoordScreen.y; }
+int Shape::getDimCoordScreenW() { return this->dimCoordScreen.w; }
+int Shape::getDimCoordScreenH() { return this->dimCoordScreen.h; }
 
 void Shape::setDimCoordSpriteX(int x) { this->dimCoordSprite.x = x; }
 void Shape::setDimCoordSpriteY(int y){ this->dimCoordSprite.y = y; }
